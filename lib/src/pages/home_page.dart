@@ -375,6 +375,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   _selectedVideoCategoryId = category.id;
                 } else {
                   _selectedAudioCategoryId = category.id;
+                  
+                  // 切换音频分类时，更新播放列表
+                  final controller = ref.read(playerControllerProvider);
+                  final categoryItems = categoryService.getMediaItemsByCategory(category.id);
+                  controller.setPlaylistItems(categoryItems);
                 }
               });
             },
@@ -496,6 +501,16 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void _navigateToMusicDetail(MediaItem item) {
     final controller = ref.read(playerControllerProvider);
+    final categoryService = ref.read(categoryServiceProvider);
+    
+    // 获取当前分类的所有歌曲
+    final categoryItems = categoryService.getMediaItemsByCategory(_selectedAudioCategoryId!);
+    
+    // 设置播放列表，从当前选中的歌曲开始播放
+    final startIndex = categoryItems.indexOf(item);
+    controller.setPlaylistItems(categoryItems, startIndex: startIndex >= 0 ? startIndex : 0);
+    
+    // 播放选中的歌曲
     controller.playMedia(item, autoPlay: true);
   }
 
@@ -763,17 +778,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Shuffle
-                      IconButton(
-                        onPressed: playerController.toggleShuffle,
-                        icon: Icon(
-                          Icons.shuffle,
-                          size: 18,
-                          color: state.isShuffleEnabled 
-                              ? Theme.of(context).colorScheme.primary 
-                              : Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
                     ],
                   ),
                   const Spacer(),

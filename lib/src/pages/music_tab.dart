@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:elara_player/src/models/media_item.dart';
 import 'package:elara_player/src/models/category.dart';
 import 'package:elara_player/src/services/category_service.dart';
+import 'package:elara_player/src/services/player_controller.dart';
 import 'package:elara_player/src/components/category_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
@@ -139,6 +140,11 @@ class MusicTab extends ConsumerWidget {
           );
           categoryService.addMediaItem(mediaItem,
               categoryId: selectedCategoryId);
+          
+          // 更新播放列表
+          final controller = ref.read(playerControllerProvider);
+          final categoryItems = categoryService.getMediaItemsByCategory(selectedCategoryId);
+          controller.setPlaylistItems(categoryItems);
         }
       }
     }

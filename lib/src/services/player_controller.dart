@@ -549,12 +549,49 @@ class PlayerController extends ChangeNotifier {
   }
 
   Future<void> next() async {
-    final nextItem = _playlist.next(
-      mode: _state.playMode,
-      shuffle: _state.isShuffleEnabled,
-    );
-    if (nextItem != null) {
-      await playMedia(nextItem);
+    final currentItem = _playlist.currentItem;
+    
+    // 如果当前没有项目，直接返回
+    if (currentItem == null) return;
+    
+    // 如果当前播放的是音频，只寻找下一个音频项目
+    if (currentItem.type == MediaType.audio) {
+      
+      // 遍历播放列表，找到下一个音频项目
+      for (int i = 0; i < _playlist.length; i++) {
+        // 调用原始的next()方法获取下一个项目
+        final nextItem = _playlist.next(
+          mode: _state.playMode,
+          shuffle: _state.isShuffleEnabled,
+        );
+        
+        if (nextItem == null) {
+          // 没有更多项目了
+          break;
+        }
+        
+        if (nextItem.type == MediaType.audio) {
+          // 找到音频项目，播放它
+          await playMedia(nextItem);
+          return;
+        }
+        
+        // 如果是循环模式，当到达列表末尾时会回到开头
+        // 所以需要检查是否回到了起点，避免无限循环
+        if (_playlist.currentItem == currentItem) {
+          // 已经循环了一圈，没有找到音频项目
+          break;
+        }
+      }
+    } else {
+      // 其他类型（视频）正常寻找下一个项目
+      final nextItem = _playlist.next(
+        mode: _state.playMode,
+        shuffle: _state.isShuffleEnabled,
+      );
+      if (nextItem != null) {
+        await playMedia(nextItem);
+      }
     }
   }
 
@@ -592,6 +629,12 @@ class PlayerController extends ChangeNotifier {
 
   void setPlayMode(PlayMode mode) {
     _updateState(_state.copyWith(playMode: mode));
+  }
+
+  /// 设置播放列表项目
+  void setPlaylistItems(List<MediaItem> items, {int startIndex = 0}) {
+    _playlist.setItems(items, startIndex: startIndex);
+    print('播放列表已更新，长度: ${items.length}, 开始索引: $startIndex');
   }
 
   void cyclePlayMode() {
