@@ -6,8 +6,10 @@ import '../models/models.dart';
 class VideoPlayerView extends StatefulWidget {
   /// 视频控制器
   final VideoController? controller;
+
   /// 播放器状态
   final PlayerState state;
+
   /// 点击回调
   final VoidCallback? onTap;
 
@@ -26,7 +28,6 @@ class VideoPlayerView extends StatefulWidget {
 class _VideoPlayerViewState extends State<VideoPlayerView> {
   @override
   Widget build(BuildContext context) {
-
     if (widget.controller == null) {
       return Container(
         color: Colors.black,
@@ -45,7 +46,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         color: Colors.black,
         child: Center(
           child: AspectRatio(
-            aspectRatio: 16/9,
+            aspectRatio: 16 / 9,
             child: Stack(
               fit: StackFit.expand,
               children: [

@@ -7,13 +7,13 @@ import 'src/src.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 初始化MediaKit
   MediaKit.ensureInitialized();
-  
+
   // 初始化窗口管理器
   await windowManager.ensureInitialized();
-  
+
   const WindowOptions windowOptions = WindowOptions(
     size: Size(1280, 720),
     minimumSize: Size(800, 600),
@@ -23,21 +23,21 @@ void main() async {
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.hidden,
   );
-  
+
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
   });
-  
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
-  
+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  
+
   runApp(
     const ProviderScope(
       child: ElaraPlayerApp(),

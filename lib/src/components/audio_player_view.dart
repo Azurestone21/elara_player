@@ -41,7 +41,8 @@ class AudioPlayerView extends StatelessWidget {
                     Text(
                       state.currentItem?.artist ?? 'Unknown Artist',
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
+                        color:
+                            theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -100,10 +101,10 @@ class AudioPlayerView extends StatelessWidget {
   }
 
   bool _isLocalImagePath(String path) {
-    return path.startsWith('/') || 
-           path.startsWith(r'C:\') || 
-           path.startsWith(r'D:\') || 
-           path.contains(':\\');
+    return path.startsWith('/') ||
+        path.startsWith(r'C:\') ||
+        path.startsWith(r'D:\') ||
+        path.contains(':\\');
   }
 
   bool _isNetworkUrl(String url) {

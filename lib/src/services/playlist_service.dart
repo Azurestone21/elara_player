@@ -15,15 +15,15 @@ class PlaylistService {
   bool get hasNext => _currentIndex < _items.length - 1;
   bool get hasPrevious => _currentIndex > 0;
 
-  MediaItem? get currentItem => 
-      _currentIndex >= 0 && _currentIndex < _items.length 
-          ? _items[_currentIndex] 
+  MediaItem? get currentItem =>
+      _currentIndex >= 0 && _currentIndex < _items.length
+          ? _items[_currentIndex]
           : null;
 
   void setItems(List<MediaItem> items, {int startIndex = 0}) {
     _items.clear();
     _items.addAll(items);
-    _currentIndex = items.isNotEmpty 
+    _currentIndex = items.isNotEmpty
         ? (startIndex >= 0 && startIndex < items.length ? startIndex : 0)
         : -1;
     _generateShuffleIndices();
@@ -51,7 +51,7 @@ class PlaylistService {
     if (index == -1) return;
 
     _items.removeAt(index);
-    
+
     if (_items.isEmpty) {
       _currentIndex = -1;
     } else if (index < _currentIndex) {
@@ -113,7 +113,8 @@ class PlaylistService {
     }
   }
 
-  MediaItem? previous({PlayMode mode = PlayMode.sequence, bool shuffle = false}) {
+  MediaItem? previous(
+      {PlayMode mode = PlayMode.sequence, bool shuffle = false}) {
     if (_items.isEmpty) return null;
 
     if (shuffle) {
@@ -153,7 +154,8 @@ class PlaylistService {
     }
   }
 
-  MediaItem? peekNext({PlayMode mode = PlayMode.sequence, bool shuffle = false}) {
+  MediaItem? peekNext(
+      {PlayMode mode = PlayMode.sequence, bool shuffle = false}) {
     if (_items.isEmpty) return null;
 
     if (shuffle || mode == PlayMode.shuffle) {
@@ -183,7 +185,7 @@ class PlaylistService {
 
     _shuffleIndices.addAll(List.generate(_items.length, (i) => i));
     _shuffleIndices.shuffle(Random());
-    
+
     if (_currentIndex >= 0) {
       _shuffleIndex = _shuffleIndices.indexOf(_currentIndex);
     } else {
@@ -193,7 +195,7 @@ class PlaylistService {
 
   MediaItem? _nextShuffle() {
     if (_shuffleIndices.isEmpty) return null;
-    
+
     _shuffleIndex = (_shuffleIndex + 1) % _shuffleIndices.length;
     _currentIndex = _shuffleIndices[_shuffleIndex];
     return currentItem;
@@ -201,8 +203,9 @@ class PlaylistService {
 
   MediaItem? _previousShuffle() {
     if (_shuffleIndices.isEmpty) return null;
-    
-    _shuffleIndex = (_shuffleIndex - 1 + _shuffleIndices.length) % _shuffleIndices.length;
+
+    _shuffleIndex =
+        (_shuffleIndex - 1 + _shuffleIndices.length) % _shuffleIndices.length;
     _currentIndex = _shuffleIndices[_shuffleIndex];
     return currentItem;
   }

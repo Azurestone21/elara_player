@@ -42,8 +42,8 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
               Text(
                 '分类管理',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
@@ -51,7 +51,8 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Theme.of(context).colorScheme.outline),
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.outline),
                   ),
                   child: IconButton(
                     onPressed: () => _showAddCategoryDialog(categoryService),
@@ -68,7 +69,8 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
             runSpacing: 16,
             children: categories.map((category) {
               final isSelected = category.id == widget.selectedCategoryId;
-              final isDefault = category.id == 'default_video' || category.id == 'default_audio';
+              final isDefault = category.id == 'default_video' ||
+                  category.id == 'default_audio';
 
               return MouseRegion(
                 cursor: SystemMouseCursors.click,
@@ -78,7 +80,8 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                     label: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(category.name, style: const TextStyle(fontSize: 14)),
+                        Text(category.name,
+                            style: const TextStyle(fontSize: 14)),
                         if (isDefault) ...[
                           const SizedBox(width: 6),
                           const Icon(Icons.star, size: 14, color: Colors.amber),
@@ -91,13 +94,15 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                         widget.onCategorySelected!(category.id);
                       }
                     },
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-                    selectedColor: Theme.of(context).colorScheme.primaryContainer,
+                    selectedColor:
+                        Theme.of(context).colorScheme.primaryContainer,
                     backgroundColor: Theme.of(context).colorScheme.surface,
                     side: BorderSide(
-                      color: isSelected 
-                          ? Theme.of(context).colorScheme.primary 
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.outline,
                     ),
                   ),
@@ -175,7 +180,8 @@ class CategorySelector extends StatelessWidget {
       child: Row(
         children: categories.map((category) {
           final isSelected = category.id == selectedCategoryId;
-          final isDefault = category.id == 'default_video' || category.id == 'default_audio';
+          final isDefault =
+              category.id == 'default_video' || category.id == 'default_audio';
 
           return Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -200,13 +206,14 @@ class CategorySelector extends StatelessWidget {
                       onCategorySelected(category.id);
                     }
                   },
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   labelPadding: const EdgeInsets.symmetric(horizontal: 4),
                   selectedColor: Theme.of(context).colorScheme.primaryContainer,
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   side: BorderSide(
-                    color: isSelected 
-                        ? Theme.of(context).colorScheme.primary 
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.outline,
                   ),
                   showCheckmark: false,
@@ -251,7 +258,8 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final isDefault = widget.category.id == 'default_video' || widget.category.id == 'default_audio';
+    final isDefault = widget.category.id == 'default_video' ||
+        widget.category.id == 'default_audio';
 
     return AlertDialog(
       title: const Text('编辑分类'),

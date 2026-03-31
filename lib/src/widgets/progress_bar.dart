@@ -32,7 +32,7 @@ class ProgressBar extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        
+
         return GestureDetector(
           onHorizontalDragStart: (_) => onSeekStart?.call(),
           onHorizontalDragEnd: (_) => onSeekEnd?.call(),
@@ -40,13 +40,15 @@ class ProgressBar extends StatelessWidget {
             final box = context.findRenderObject() as RenderBox;
             final localPosition = box.globalToLocal(details.globalPosition);
             final percent = (localPosition.dx / box.size.width).clamp(0.0, 1.0);
-            onSeek?.call(Duration(milliseconds: (percent * duration.inMilliseconds).toInt()));
+            onSeek?.call(Duration(
+                milliseconds: (percent * duration.inMilliseconds).toInt()));
           },
           onTapDown: (details) {
             final box = context.findRenderObject() as RenderBox;
             final localPosition = box.globalToLocal(details.globalPosition);
             final percent = (localPosition.dx / box.size.width).clamp(0.0, 1.0);
-            onSeek?.call(Duration(milliseconds: (percent * duration.inMilliseconds).toInt()));
+            onSeek?.call(Duration(
+                milliseconds: (percent * duration.inMilliseconds).toInt()));
           },
           child: Container(
             height: 20,

@@ -99,7 +99,7 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
     // 获取文件目录和文件名（不含扩展名）
     final dir = path.dirname(musicPath);
     final fileNameWithoutExt = path.basenameWithoutExtension(musicPath);
-    
+
     // 构建 lrc 文件路径
     final lrcPath = path.join(dir, '$fileNameWithoutExt.lrc');
     return lrcPath;
@@ -124,7 +124,8 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
         final text = match.group(4)!.trim();
 
         if (text.isNotEmpty) {
-          final totalMilliseconds = minutes * 60 * 1000 + seconds * 1000 + milliseconds;
+          final totalMilliseconds =
+              minutes * 60 * 1000 + seconds * 1000 + milliseconds;
           lyrics.add(LyricLine(
             time: Duration(milliseconds: totalMilliseconds),
             text: text,
@@ -160,14 +161,16 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
 
   void _scrollToCurrentLyric() {
     if (_lyrics.isEmpty || _currentLyricIndex < 0) return;
-    
+
     // 检查 ScrollController 是否已经附加到 scroll view
     if (!_lyricScrollController.hasClients) return;
 
     // 计算需要滚动的位置，使当前歌词显示在中间
     const itemHeight = 40.0; // 每行歌词的高度
     final viewportHeight = _lyricScrollController.position.viewportDimension;
-    final targetOffset = (_currentLyricIndex * itemHeight) - (viewportHeight / 2) + (itemHeight / 2);
+    final targetOffset = (_currentLyricIndex * itemHeight) -
+        (viewportHeight / 2) +
+        (itemHeight / 2);
 
     _lyricScrollController.animateTo(
       targetOffset.clamp(0.0, _lyricScrollController.position.maxScrollExtent),
@@ -282,7 +285,8 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
                     await windowManager.maximize();
                   }
                 },
-                icon: Icon(Icons.square_outlined, size: 16, color: Colors.grey[800]),
+                icon: Icon(Icons.square_outlined,
+                    size: 16, color: Colors.grey[800]),
                 padding: EdgeInsets.zero,
                 iconSize: 16,
                 constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -493,7 +497,8 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
             children: [
               // 播放模式
               IconButton(
-                onPressed: () => ref.read(playerControllerProvider).cyclePlayMode(),
+                onPressed: () =>
+                    ref.read(playerControllerProvider).cyclePlayMode(),
                 icon: Icon(
                   _getPlayModeIcon(state.playMode),
                   color: Colors.grey[700],
@@ -520,7 +525,8 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 child: IconButton(
-                  onPressed: () => ref.read(playerControllerProvider).togglePlayPause(),
+                  onPressed: () =>
+                      ref.read(playerControllerProvider).togglePlayPause(),
                   icon: Icon(
                     state.isPlaying ? Icons.pause : Icons.play_arrow,
                     color: Colors.white,

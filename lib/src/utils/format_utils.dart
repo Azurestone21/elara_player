@@ -27,7 +27,8 @@ class FormatUtils {
 
   static bool isVideoFile(String path) {
     final ext = getFileExtension(path);
-    return ['mp4', 'mkv', 'mov', 'avi', 'flv', 'wmv', 'webm', 'm4v', '3gp'].contains(ext);
+    return ['mp4', 'mkv', 'mov', 'avi', 'flv', 'wmv', 'webm', 'm4v', '3gp']
+        .contains(ext);
   }
 
   static bool isAudioFile(String path) {

@@ -33,7 +33,7 @@ class MediaItem {
   });
 
   bool get isNetwork => uri.startsWith('http://') || uri.startsWith('https://');
-  
+
   bool get isLocal => !isNetwork;
 
   MediaItem copyWith({

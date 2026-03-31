@@ -59,15 +59,15 @@ class PlayerErrorWidget extends StatelessWidget {
               Text(
                 'Playback Error',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                ),
+                      color: Colors.white,
+                    ),
               ),
               const SizedBox(height: 8),
               Text(
                 message,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white70,
-                ),
+                      color: Colors.white70,
+                    ),
                 textAlign: TextAlign.center,
               ),
               if (onRetry != null) ...[

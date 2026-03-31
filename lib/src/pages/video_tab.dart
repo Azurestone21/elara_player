@@ -47,7 +47,8 @@ class VideoTab extends ConsumerWidget {
   ) {
     final mediaItems = categoryService
         .getMediaItemsByCategory(selectedCategoryId)
-        .where((item) => item.title.toLowerCase().contains(searchQuery.toLowerCase()))
+        .where((item) =>
+            item.title.toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
 
     return Column(
@@ -110,7 +111,8 @@ class VideoTab extends ConsumerWidget {
             uri: file.path!,
             type: MediaType.video,
           );
-          categoryService.addMediaItem(mediaItem, categoryId: selectedCategoryId);
+          categoryService.addMediaItem(mediaItem,
+              categoryId: selectedCategoryId);
         }
       }
     }
@@ -179,9 +181,10 @@ class VideoTab extends ConsumerWidget {
       trailing: PopupMenuButton<String>(
         onSelected: (value) async {
           final categoryService = ref.read(categoryServiceProvider);
-          
+
           if (value == 'move') {
-            final categories = categoryService.getCategoriesByType(MediaType.video);
+            final categories =
+                categoryService.getCategoriesByType(MediaType.video);
             if (categories.isNotEmpty) {
               final selectedCategory = await showDialog<Category>(
                 context: context,
@@ -198,30 +201,32 @@ class VideoTab extends ConsumerWidget {
                   ),
                 ),
               );
-              
+
               if (selectedCategory != null) {
-                categoryService.moveMediaItemToCategory(item.id, selectedCategory.id);
+                categoryService.moveMediaItemToCategory(
+                    item.id, selectedCategory.id);
               }
             }
           } else if (value == 'delete') {
             final confirmed = await showDialog<bool>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('确认删除'),
-                content: const Text('确定要删除这个视频吗？'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: const Text('取消'),
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('确认删除'),
+                    content: const Text('确定要删除这个视频吗？'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text('取消'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text('删除'),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text('删除'),
-                  ),
-                ],
-              ),
-            ) ?? false;
-            
+                ) ??
+                false;
+
             if (confirmed) {
               categoryService.removeMediaItem(item.id);
             }

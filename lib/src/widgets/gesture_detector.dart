@@ -78,7 +78,8 @@ class _PlayerGestureDetectorState extends State<PlayerGestureDetector> {
       },
       onVerticalDragUpdate: (details) {
         if (!_isHorizontalDrag && widget.onVerticalDragUpdate != null) {
-          final width = context.size?.width ?? MediaQuery.of(context).size.width;
+          final width =
+              context.size?.width ?? MediaQuery.of(context).size.width;
           final isLeftSide = _dragStartPosition.dx < width / 2;
           widget.onVerticalDragUpdate!(details.delta, isLeftSide);
         }
@@ -116,7 +117,8 @@ class VolumeBrightnessGesture extends StatefulWidget {
   });
 
   @override
-  State<VolumeBrightnessGesture> createState() => _VolumeBrightnessGestureState();
+  State<VolumeBrightnessGesture> createState() =>
+      _VolumeBrightnessGestureState();
 }
 
 class _VolumeBrightnessGestureState extends State<VolumeBrightnessGesture> {
@@ -179,11 +181,12 @@ class _VolumeBrightnessGestureState extends State<VolumeBrightnessGesture> {
         PlayerGestureDetector(
           onVerticalDragUpdate: (delta, isLeftSide) {
             if (!PlatformUtils.isMobile) return;
-            
+
             final deltaPercent = -delta.dy / 300;
-            
+
             if (isLeftSide) {
-              _currentBrightness = (_currentBrightness + deltaPercent).clamp(0.0, 1.0);
+              _currentBrightness =
+                  (_currentBrightness + deltaPercent).clamp(0.0, 1.0);
               _showBrightnessIndicator(_currentBrightness);
               widget.onBrightnessChange?.call(_currentBrightness);
             } else {

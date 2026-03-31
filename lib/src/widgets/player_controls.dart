@@ -122,8 +122,7 @@ class PlayerControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (onCyclePlayMode != null)
-          _buildPlayModeButton(),
+        if (onCyclePlayMode != null) _buildPlayModeButton(),
         const SizedBox(width: 16),
         if (onPrevious != null)
           _ControlButton(
@@ -157,7 +156,7 @@ class PlayerControls extends StatelessWidget {
   Widget _buildPlayModeButton() {
     IconData icon;
     String tooltip;
-    
+
     switch (state.playMode) {
       case PlayMode.sequence:
         icon = Icons.repeat;
@@ -234,7 +233,8 @@ class _ControlButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
-      icon: Icon(icon, color: onPressed != null ? Colors.white : Colors.white38),
+      icon:
+          Icon(icon, color: onPressed != null ? Colors.white : Colors.white38),
       iconSize: size,
       padding: EdgeInsets.zero,
     );

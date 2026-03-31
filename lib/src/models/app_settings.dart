@@ -37,7 +37,8 @@ class AppSettings {
       defaultSpeed: defaultSpeed ?? this.defaultSpeed,
       autoPlay: autoPlay ?? this.autoPlay,
       rememberPosition: rememberPosition ?? this.rememberPosition,
-      enableHardwareAcceleration: enableHardwareAcceleration ?? this.enableHardwareAcceleration,
+      enableHardwareAcceleration:
+          enableHardwareAcceleration ?? this.enableHardwareAcceleration,
       defaultDownloadPath: defaultDownloadPath ?? this.defaultDownloadPath,
     );
   }

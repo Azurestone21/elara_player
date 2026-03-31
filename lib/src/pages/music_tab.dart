@@ -139,10 +139,11 @@ class MusicTab extends ConsumerWidget {
           );
           categoryService.addMediaItem(mediaItem,
               categoryId: selectedCategoryId);
-          
+
           // 更新播放列表
           final controller = ref.read(playerControllerProvider);
-          final categoryItems = categoryService.getMediaItemsByCategory(selectedCategoryId);
+          final categoryItems =
+              categoryService.getMediaItemsByCategory(selectedCategoryId);
           controller.setPlaylistItems(categoryItems);
         }
       }

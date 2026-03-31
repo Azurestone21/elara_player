@@ -42,7 +42,8 @@ class CategoryService extends ChangeNotifier {
   }
 
   Category? getDefaultCategory(MediaType type) {
-    final defaultId = type == MediaType.video ? 'default_video' : 'default_audio';
+    final defaultId =
+        type == MediaType.video ? 'default_video' : 'default_audio';
     return getCategoryById(defaultId);
   }
 
@@ -106,7 +107,9 @@ class CategoryService extends ChangeNotifier {
   }
 
   List<MediaItem> getMediaItemsByCategory(String categoryId) {
-    return _allMediaItems.where((item) => item.categoryId == categoryId).toList();
+    return _allMediaItems
+        .where((item) => item.categoryId == categoryId)
+        .toList();
   }
 
   void addMediaItem(MediaItem item, {String? categoryId}) {
@@ -128,7 +131,8 @@ class CategoryService extends ChangeNotifier {
 
     final existingIndex = _allMediaItems.indexWhere((i) => i.id == item.id);
     if (existingIndex != -1) {
-      _allMediaItems[existingIndex] = item.copyWith(categoryId: targetCategoryId);
+      _allMediaItems[existingIndex] =
+          item.copyWith(categoryId: targetCategoryId);
     } else {
       _allMediaItems.add(item.copyWith(categoryId: targetCategoryId));
     }

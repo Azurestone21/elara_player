@@ -38,9 +38,10 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
   void _initializePlayer() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = ref.read(playerControllerProvider);
-      
+
       if (widget.playlist != null && widget.playlist!.isNotEmpty) {
-        controller.playlist.setItems(widget.playlist!, startIndex: widget.startIndex);
+        controller.playlist
+            .setItems(widget.playlist!, startIndex: widget.startIndex);
         final currentItem = controller.playlist.currentItem;
         if (currentItem != null) {
           controller.playMedia(currentItem, autoPlay: true);
@@ -110,7 +111,8 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.black,
-          border: Border(bottom: BorderSide(color: Colors.grey[800]!, width: 1)),
+          border:
+              Border(bottom: BorderSide(color: Colors.grey[800]!, width: 1)),
         ),
         child: Row(
           children: [
@@ -151,7 +153,8 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                   icon: const Icon(Icons.remove, size: 16, color: Colors.white),
                   padding: EdgeInsets.zero,
                   iconSize: 16,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints:
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                 ),
                 IconButton(
                   onPressed: () async {
@@ -161,17 +164,20 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                       await windowManager.maximize();
                     }
                   },
-                  icon: const Icon(Icons.square_outlined, size: 16, color: Colors.white),
+                  icon: const Icon(Icons.square_outlined,
+                      size: 16, color: Colors.white),
                   padding: EdgeInsets.zero,
                   iconSize: 16,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints:
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                 ),
                 IconButton(
                   onPressed: () => windowManager.close(),
                   icon: const Icon(Icons.close, size: 16, color: Colors.white),
                   padding: EdgeInsets.zero,
                   iconSize: 16,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints:
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                 ),
               ],
             ),
@@ -222,7 +228,6 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
               ),
             if (state.isBuffering && !state.isLoading)
               const BufferingIndicator(),
-
             PlayerControls(
               state: state,
               visible: controller.controlsVisible,
@@ -247,7 +252,6 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
   }
 
   Widget _buildMediaContent(PlayerController controller, PlayerState state) {
-    
     if (state.currentItem == null) {
       return Container(
         color: Colors.black,
@@ -279,6 +283,4 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
   }
-
-
 }

@@ -24,12 +24,16 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   /// 当前选中的标签页 (0: 视频, 1: 音乐)
   int _currentTab = 1;
+
   /// 选中的视频分类ID
   String? _selectedVideoCategoryId;
+
   /// 选中的音频分类ID
   String? _selectedAudioCategoryId;
+
   /// 侧边栏是否展开
   bool _sidebarExpanded = true;
+
   /// 搜索查询
   String _searchQuery = '';
 
@@ -42,15 +46,17 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _initializeDefaultCategories() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final categoryService = ref.read(categoryServiceProvider);
-      
-      final videoCategories = categoryService.getCategoriesByType(MediaType.video);
+
+      final videoCategories =
+          categoryService.getCategoriesByType(MediaType.video);
       if (videoCategories.isNotEmpty && _selectedVideoCategoryId == null) {
         setState(() {
           _selectedVideoCategoryId = videoCategories.first.id;
         });
       }
-      
-      final audioCategories = categoryService.getCategoriesByType(MediaType.audio);
+
+      final audioCategories =
+          categoryService.getCategoriesByType(MediaType.audio);
       if (audioCategories.isNotEmpty && _selectedAudioCategoryId == null) {
         setState(() {
           _selectedAudioCategoryId = audioCategories.first.id;
@@ -97,18 +103,26 @@ class _HomePageState extends ConsumerState<HomePage> {
                               children: [
                                 Text(
                                   '分类',
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
-                                    onTap: () => _showAddCategoryDialog(_currentTab == 0 ? MediaType.video : MediaType.audio, categoryService),
+                                    onTap: () => _showAddCategoryDialog(
+                                        _currentTab == 0
+                                            ? MediaType.video
+                                            : MediaType.audio,
+                                        categoryService),
                                     child: Icon(
                                       Icons.add,
                                       size: 14,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -134,7 +148,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                         color: Theme.of(context).colorScheme.surface,
                         child: Center(
                           child: Icon(
-                            _sidebarExpanded ? Icons.chevron_left : Icons.chevron_right,
+                            _sidebarExpanded
+                                ? Icons.chevron_left
+                                : Icons.chevron_right,
                             size: 16,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
@@ -143,8 +159,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                   Expanded(
-                    child: _currentTab == 0 
-                        ? _buildVideoTab(categoryService) 
+                    child: _currentTab == 0
+                        ? _buildVideoTab(categoryService)
                         : _buildMusicTab(categoryService),
                   ),
                 ],
@@ -165,7 +181,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         height: 40,
         decoration: BoxDecoration(
           color: Theme.of(context).appBarTheme.backgroundColor,
-          border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+          border:
+              Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
         ),
         child: Row(
           children: [
@@ -186,7 +203,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                     height: 28,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Theme.of(context).colorScheme.outline.withOpacity(0.5)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withOpacity(0.5)),
                     ),
                     child: Row(
                       children: [
@@ -195,11 +216,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: GestureDetector(
                             onTap: () => setState(() => _currentTab = 1),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: _currentTab == 1 
-                                    ? Theme.of(context).colorScheme.primary.withOpacity(0.7) 
+                                color: _currentTab == 1
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.7)
                                     : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -210,10 +235,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 'Music',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: _currentTab == 1 
-                                      ? Colors.white 
+                                  color: _currentTab == 1
+                                      ? Colors.white
                                       : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: _currentTab == 1 ? FontWeight.w600 : FontWeight.normal,
+                                  fontWeight: _currentTab == 1
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
                                 ),
                               ),
                             ),
@@ -224,11 +251,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: GestureDetector(
                             onTap: () => setState(() => _currentTab = 0),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: _currentTab == 0 
-                                    ? Theme.of(context).colorScheme.primary.withOpacity(0.7) 
+                                color: _currentTab == 0
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.7)
                                     : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(8),
@@ -239,10 +270,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 'Videos',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: _currentTab == 0 
-                                      ? Colors.white 
+                                  color: _currentTab == 0
+                                      ? Colors.white
                                       : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: _currentTab == 0 ? FontWeight.w600 : FontWeight.normal,
+                                  fontWeight: _currentTab == 0
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
                                 ),
                               ),
                             ),
@@ -280,7 +313,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: '搜索...',
-                              hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                              hintStyle: TextStyle(
+                                  fontSize: 12, color: Colors.grey[400]),
                               isDense: true,
                             ),
                             style: const TextStyle(fontSize: 12),
@@ -301,8 +335,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Icon(Icons.clear, size: 14, color: Colors.grey[400]),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: Icon(Icons.clear,
+                                    size: 14, color: Colors.grey[400]),
                               ),
                             ),
                           ),
@@ -319,7 +355,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   icon: const Icon(Icons.remove, size: 16),
                   padding: EdgeInsets.zero,
                   iconSize: 16,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints:
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                   tooltip: '最小化',
                 ),
                 IconButton(
@@ -333,7 +370,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   icon: const Icon(Icons.square_outlined, size: 16),
                   padding: EdgeInsets.zero,
                   iconSize: 16,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints:
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                   tooltip: '最大化',
                 ),
                 IconButton(
@@ -341,7 +379,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   icon: const Icon(Icons.close, size: 16),
                   padding: EdgeInsets.zero,
                   iconSize: 16,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints:
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                   tooltip: '关闭',
                 ),
               ],
@@ -355,7 +394,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildSidebar(CategoryService categoryService) {
     final currentType = _currentTab == 0 ? MediaType.video : MediaType.audio;
     final categories = categoryService.getCategoriesByType(currentType);
-    final selectedCategoryId = _currentTab == 0 ? _selectedVideoCategoryId : _selectedAudioCategoryId;
+    final selectedCategoryId =
+        _currentTab == 0 ? _selectedVideoCategoryId : _selectedAudioCategoryId;
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 0),
@@ -363,7 +403,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       itemBuilder: (context, index) {
         final category = categories[index];
         final isSelected = category.id == selectedCategoryId;
-        final isDefault = category.id == 'default_video' || category.id == 'default_audio';
+        final isDefault =
+            category.id == 'default_video' || category.id == 'default_audio';
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
@@ -375,10 +416,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   _selectedVideoCategoryId = category.id;
                 } else {
                   _selectedAudioCategoryId = category.id;
-                  
+
                   // 切换音频分类时，更新播放列表
                   final controller = ref.read(playerControllerProvider);
-                  final categoryItems = categoryService.getMediaItemsByCategory(category.id);
+                  final categoryItems =
+                      categoryService.getMediaItemsByCategory(category.id);
                   controller.setPlaylistItems(categoryItems);
                 }
               });
@@ -386,7 +428,8 @@ class _HomePageState extends ConsumerState<HomePage> {
             hoverColor: !isSelected ? const Color(0xFFF0E6F6) : null,
             child: ListTile(
               minVerticalPadding: 0,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               title: Row(
                 children: [
                   Expanded(
@@ -394,9 +437,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                       category.name,
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                        color: isSelected 
-                            ? Theme.of(context).colorScheme.primary 
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
@@ -410,7 +454,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                        onTap: () => _showEditCategoryDialog(category, categoryService),
+                        onTap: () =>
+                            _showEditCategoryDialog(category, categoryService),
                         child: Icon(
                           Icons.edit,
                           size: 10,
@@ -422,7 +467,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ],
               ),
               selected: isSelected,
-              selectedTileColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+              selectedTileColor: Theme.of(context)
+                  .colorScheme
+                  .primaryContainer
+                  .withOpacity(0.3),
             ),
           ),
         );
@@ -459,20 +507,22 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _openMusicDetailFromControls() {
     final controller = ref.read(playerControllerProvider);
     final currentItem = controller.state.currentItem;
-    
+
     if (currentItem == null || currentItem.type != MediaType.audio) return;
-    
+
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const MusicDetailPage(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const MusicDetailPage(),
         transitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
           return SlideTransition(
@@ -487,7 +537,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _navigateToPlayer(MediaItem item) {
     final controller = ref.read(playerControllerProvider);
     controller.playMedia(item, autoPlay: true);
-    
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -502,14 +552,16 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _navigateToMusicDetail(MediaItem item) {
     final controller = ref.read(playerControllerProvider);
     final categoryService = ref.read(categoryServiceProvider);
-    
+
     // 获取当前分类的所有歌曲
-    final categoryItems = categoryService.getMediaItemsByCategory(_selectedAudioCategoryId!);
-    
+    final categoryItems =
+        categoryService.getMediaItemsByCategory(_selectedAudioCategoryId!);
+
     // 设置播放列表，从当前选中的歌曲开始播放
     final startIndex = categoryItems.indexOf(item);
-    controller.setPlaylistItems(categoryItems, startIndex: startIndex >= 0 ? startIndex : 0);
-    
+    controller.setPlaylistItems(categoryItems,
+        startIndex: startIndex >= 0 ? startIndex : 0);
+
     // 播放选中的歌曲
     controller.playMedia(item, autoPlay: true);
   }
@@ -559,9 +611,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void _showEditCategoryDialog(Category category, CategoryService categoryService) {
+  void _showEditCategoryDialog(
+      Category category, CategoryService categoryService) {
     final controller = TextEditingController(text: category.name);
-    final isDefault = category.id == 'default_video' || category.id == 'default_audio';
+    final isDefault =
+        category.id == 'default_video' || category.id == 'default_audio';
 
     showDialog(
       context: context,
@@ -577,7 +631,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         actions: [
           if (!isDefault)
             TextButton(
-              onPressed: () => _showDeleteConfirmDialog(category, categoryService),
+              onPressed: () =>
+                  _showDeleteConfirmDialog(category, categoryService),
               child: const Text('删除分类', style: TextStyle(color: Colors.red)),
             ),
           TextButton(
@@ -602,7 +657,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void _showDeleteConfirmDialog(Category category, CategoryService categoryService) {
+  void _showDeleteConfirmDialog(
+      Category category, CategoryService categoryService) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -618,14 +674,16 @@ class _HomePageState extends ConsumerState<HomePage> {
               categoryService.deleteCategory(category.id);
               setState(() {
                 if (category.type == MediaType.video) {
-                  final videoCategories = categoryService.getCategoriesByType(MediaType.video);
+                  final videoCategories =
+                      categoryService.getCategoriesByType(MediaType.video);
                   if (videoCategories.isNotEmpty) {
                     _selectedVideoCategoryId = videoCategories.first.id;
                   } else {
                     _selectedVideoCategoryId = null;
                   }
                 } else {
-                  final audioCategories = categoryService.getCategoriesByType(MediaType.audio);
+                  final audioCategories =
+                      categoryService.getCategoriesByType(MediaType.audio);
                   if (audioCategories.isNotEmpty) {
                     _selectedAudioCategoryId = audioCategories.first.id;
                   } else {
@@ -644,22 +702,24 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-
-
   Widget _buildMusicPlayerControls() {
     final playerController = ref.watch(playerControllerProvider);
     final state = playerController.state;
 
     return GestureDetector(
       onTap: () {
-        if (state.currentItem != null && state.currentItem!.type == MediaType.audio) {
+        if (state.currentItem != null &&
+            state.currentItem!.type == MediaType.audio) {
           _openMusicDetailFromControls();
         }
       },
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          border: Border(top: BorderSide(color: Theme.of(context).colorScheme.outline.withOpacity(0.3))),
+          border: Border(
+              top: BorderSide(
+                  color:
+                      Theme.of(context).colorScheme.outline.withOpacity(0.3))),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -688,7 +748,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                           height: 48,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
-                            color: Theme.of(context).colorScheme.secondaryContainer,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
                           ),
                           child: state.currentItem!.thumbnailUrl != null
                               ? ClipRRect(
@@ -696,7 +758,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   child: Image.network(
                                     state.currentItem!.thumbnailUrl!,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => _buildMusicPlaceholder(),
+                                    errorBuilder: (_, __, ___) =>
+                                        _buildMusicPlaceholder(),
                                   ),
                                 )
                               : _buildMusicPlaceholder(),
@@ -719,7 +782,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                               state.currentItem!.artist ?? 'Unknown Artist',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.7),
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -746,19 +812,26 @@ class _HomePageState extends ConsumerState<HomePage> {
                       const SizedBox(width: 8),
                       // 上一个按钮
                       IconButton(
-                        onPressed: state.hasPrevious ? playerController.previous : null,
+                        onPressed: state.hasPrevious
+                            ? playerController.previous
+                            : null,
                         icon: Icon(
                           Icons.skip_previous,
                           size: 24,
-                          color: state.hasPrevious 
-                              ? Theme.of(context).colorScheme.onSurface 
-                              : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                          color: state.hasPrevious
+                              ? Theme.of(context).colorScheme.onSurface
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.3),
                         ),
                       ),
                       const SizedBox(width: 16),
                       // 播放/暂停按钮
                       IconButton(
-                        onPressed: state.currentItem != null ? playerController.togglePlayPause : null,
+                        onPressed: state.currentItem != null
+                            ? playerController.togglePlayPause
+                            : null,
                         icon: Icon(
                           state.isPlaying ? Icons.pause : Icons.play_arrow,
                           size: 32,
@@ -772,9 +845,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                         icon: Icon(
                           Icons.skip_next,
                           size: 24,
-                          color: state.hasNext 
-                              ? Theme.of(context).colorScheme.onSurface 
-                              : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                          color: state.hasNext
+                              ? Theme.of(context).colorScheme.onSurface
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.3),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -798,11 +874,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                         width: 100,
                         child: Slider(
                           value: state.volume,
-                          onChanged: (value) => playerController.setVolume(value),
+                          onChanged: (value) =>
+                              playerController.setVolume(value),
                           min: 0.0,
                           max: 1.0,
                           activeColor: Theme.of(context).colorScheme.primary,
-                          inactiveColor: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                          inactiveColor: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withOpacity(0.3),
                         ),
                       ),
                     ],
