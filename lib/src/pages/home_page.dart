@@ -536,14 +536,22 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void _navigateToPlayer(MediaItem item) {
     final controller = ref.read(playerControllerProvider);
-    controller.playMedia(item, autoPlay: true);
+    final categoryService = ref.read(categoryServiceProvider);
 
+    // 获取当前分类的所有视频项目
+    final categoryItems = categoryService.getMediaItemsByCategory(_selectedVideoCategoryId!);
+
+    // 设置播放列表，从当前选中的视频开始播放
+    final startIndex = categoryItems.indexOf(item);
+    controller.setPlaylistItems(categoryItems, startIndex: startIndex >= 0 ? startIndex : 0);
+
+    
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PlayerPage(
-          playlist: [item],
-          startIndex: 0,
+          playlist: categoryItems,
+          startIndex: startIndex
         ),
       ),
     );
