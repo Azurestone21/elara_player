@@ -567,6 +567,9 @@ class PlayerController extends ChangeNotifier {
         
         if (nextItem == null) {
           // 没有更多项目了
+          await pause();
+          // 暂停播放后，更新状态为暂停
+          _updateState(_state.copyWith(status: PlayerStatus.paused));
           break;
         }
         
