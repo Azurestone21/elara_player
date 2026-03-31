@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 import '../models/models.dart';
 import 'progress_bar.dart';
 
@@ -88,16 +89,18 @@ class PlayerControls extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(
-            state.currentItem?.title ?? 'Unknown',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: UniversalPlatform.isWindows
+              ? Container(color: Colors.transparent)
+              : Text(
+                  state.currentItem?.title ?? 'Unknown',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
         ),
         if (onToggleLock != null)
           IconButton(
