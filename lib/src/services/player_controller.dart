@@ -612,8 +612,17 @@ class PlayerController extends ChangeNotifier {
     }
   }
 
-  void toggleFullscreen() {
-    _updateState(_state.copyWith(isFullscreen: !_state.isFullscreen));
+  void toggleFullscreen() async {
+    final newFullscreen = !_state.isFullscreen;
+    _updateState(_state.copyWith(isFullscreen: newFullscreen));
+    
+    if (UniversalPlatform.isWindows) {
+      if (newFullscreen) {
+        await windowManager.setFullScreen(true);
+      } else {
+        await windowManager.setFullScreen(false);
+      }
+    }
   }
 
   void setFullscreen(bool fullscreen) {
