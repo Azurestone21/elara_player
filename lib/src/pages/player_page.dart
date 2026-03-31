@@ -247,11 +247,6 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
   }
 
   Widget _buildMediaContent(PlayerController controller, PlayerState state) {
-    print('_buildMediaContent 被调用');
-    print('当前项目: ${state.currentItem?.title}');
-    print('当前项目类型: ${state.currentItem?.type}');
-    print('播放器状态: ${state.status}');
-    print('视频控制器: ${controller.videoController}');
     
     if (state.currentItem == null) {
       return Container(
@@ -266,13 +261,11 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
     }
 
     if (state.currentItem!.type == MediaType.video) {
-      print('正在构建 VideoPlayerView');
       return VideoPlayerView(
         controller: controller.videoController,
         state: state,
       );
     } else {
-      print('正在构建 AudioPlayerView');
       return AudioPlayerView(
         state: state,
       );
