@@ -438,88 +438,53 @@ class PlayerController extends ChangeNotifier {
     }
   }
 
+  /// 下一个项目
   Future<void> next() async {
     final currentItem = _playlist.currentItem;
 
     // 如果当前没有项目，直接返回
     if (currentItem == null) return;
 
-    // 如果当前播放的是音频，只寻找下一个音频项目
-    if (currentItem.type == MediaType.audio) {
-      // 遍历播放列表，找到下一个音频项目
-      for (int i = 0; i < _playlist.length; i++) {
-        // 调用原始的next()方法获取下一个项目
-        final nextItem = _playlist.next(
-          mode: _state.playMode,
-          shuffle: _state.isShuffleEnabled,
-        );
+    // 调用next()方法获取下一个项目
+    final nextItem = _playlist.next(
+      mode: _state.playMode,
+      shuffle: _state.isShuffleEnabled,
+    );
 
-        if (nextItem == null) {
-          // 没有更多项目了
-          await pause();
-          // 暂停播放后，更新状态为暂停
-          _updateState(_state.copyWith(status: PlayerStatus.paused));
-          break;
-        }
-
-        if (nextItem.type == MediaType.audio) {
-          // 找到音频项目，播放它
-          await playMedia(nextItem);
-          return;
-        }
-
-        // 如果是循环模式，当到达列表末尾时会回到开头
-        // 所以需要检查是否回到了起点，避免无限循环
-        if (_playlist.currentItem == currentItem) {
-          // 已经循环了一圈，没有找到音频项目
-          break;
-        }
-      }
+    if (nextItem == null) {
+      // 没有更多项目了
+      await pause();
+      // 暂停播放后，更新状态为暂停
+      _updateState(_state.copyWith(status: PlayerStatus.paused));
     } else {
-      // 其他类型（视频）正常寻找下一个项目
-      final nextItem = _playlist.next(
-        mode: _state.playMode,
-        shuffle: _state.isShuffleEnabled,
-      );
-      if (nextItem != null) {
-        await playMedia(nextItem);
+      // 如果是循环模式，当到达列表末尾时会回到开头，需要检查是否回到了起点，避免无限循环
+      if (_state.playMode == PlayMode.loop && currentItem == nextItem) {
+        return;
       }
+      await playMedia(nextItem);
     }
   }
 
+  /// 上一个项目
   Future<void> previous() async {
     if (_state.position > const Duration(seconds: 3)) {
       await seek(Duration.zero);
     } else {
       final currentItem = _playlist.currentItem;
-      MediaItem? prevItem;
 
-      // 如果当前播放的是音频，只寻找上一个音频项目
-      if (currentItem?.type == MediaType.audio) {
-        // 尝试找到上一个音频项目
-        for (int i = 0; i < _playlist.length; i++) {
-          prevItem = _playlist.previous(
-            mode: _state.playMode,
-            shuffle: _state.isShuffleEnabled,
-          );
-          if (prevItem == null) {
-            // 没有更多项目了
-            break;
-          }
-          if (prevItem.type == MediaType.audio) {
-            // 找到音频项目，停止搜索
-            break;
-          }
-        }
+      if (currentItem == null) return;
+
+      // 调用previous()方法获取上一个项目
+      final prevItem = _playlist.previous(
+        mode: _state.playMode,
+        shuffle: _state.isShuffleEnabled,
+      );
+      if (prevItem == null) {
+        // 没有更多项目了
+        await pause();
+        // 暂停播放后，更新状态为暂停
+        _updateState(_state.copyWith(status: PlayerStatus.paused));
       } else {
-        // 其他类型（视频）正常寻找上一个项目
-        prevItem = _playlist.previous(
-          mode: _state.playMode,
-          shuffle: _state.isShuffleEnabled,
-        );
-      }
-
-      if (prevItem != null) {
         await playMedia(prevItem);
       }
     }
