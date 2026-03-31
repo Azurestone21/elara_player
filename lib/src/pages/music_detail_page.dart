@@ -7,7 +7,6 @@ import 'package:path/path.dart' as path;
 import '../models/models.dart';
 import '../widgets/widgets.dart';
 import '../services/services.dart';
-import 'player_page.dart';
 
 class LyricLine {
   final Duration time;

@@ -7,7 +7,6 @@ import 'package:elara_player/src/services/player_controller.dart';
 import 'package:elara_player/src/components/category_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
-import 'dart:io';
 import 'package:audiotags/audiotags.dart';
 
 class MusicTab extends ConsumerWidget {
