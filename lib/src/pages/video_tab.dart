@@ -52,13 +52,13 @@ class VideoTab extends ConsumerWidget {
 
     return Column(
       children: [
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     _buildAddButtons(context, ref),
-        //     const SizedBox(width: 16),
-        //   ],
-        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            _buildAddButtons(context, ref),
+            const SizedBox(width: 16),
+          ],
+        ),
         const SizedBox(height: 16),
         Expanded(
           child: _buildVideoList(context, ref, mediaItems, onMediaSelected),
