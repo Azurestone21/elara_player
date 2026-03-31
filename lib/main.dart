@@ -11,7 +11,7 @@ void main() async {
   // 初始化MediaKit
   MediaKit.ensureInitialized();
   
-  // Initialize window manager for custom title bar
+  // 初始化窗口管理器
   await windowManager.ensureInitialized();
   
   const WindowOptions windowOptions = WindowOptions(
