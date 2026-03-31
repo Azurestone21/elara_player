@@ -744,7 +744,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Previous
+                      // 上一个按钮
                       IconButton(
                         onPressed: state.hasPrevious ? playerController.previous : null,
                         icon: Icon(
@@ -756,7 +756,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Play/pause
+                      // 播放/暂停按钮
                       IconButton(
                         onPressed: state.currentItem != null ? playerController.togglePlayPause : null,
                         icon: Icon(
@@ -766,7 +766,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Next
+                      // 下一个按钮
                       IconButton(
                         onPressed: state.hasNext ? playerController.next : null,
                         icon: Icon(
@@ -781,9 +781,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ],
                   ),
                   const Spacer(),
-                  // Volume control
+                  // 音量控制
                   Row(
                     children: [
+                      // 静音按钮
                       IconButton(
                         onPressed: playerController.toggleMute,
                         icon: Icon(
@@ -792,6 +793,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
+                      // 音量滑块
                       Container(
                         width: 100,
                         child: Slider(
