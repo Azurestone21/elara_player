@@ -1,11 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:video_player/video_player.dart' as vp;
+import 'package:media_kit/media_kit.dart' as mk;
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:audioplayers/audioplayers.dart' as ap;
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'package:window_manager/window_manager.dart';
 import '../models/models.dart';
 import 'playlist_service.dart';
 
@@ -19,7 +21,8 @@ class PlayerController extends ChangeNotifier {
   /// 播放列表服务
   final PlaylistService _playlist = PlaylistService();
   /// 视频播放器控制器
-  vp.VideoPlayerController? _videoController;
+  mk.Player? _videoPlayer;
+  VideoController? _videoController;
   /// 音频播放器
   ap.AudioPlayer? _audioPlayer;
   
@@ -41,11 +44,18 @@ class PlayerController extends ChangeNotifier {
   /// 获取控制栏是否可见
   bool get controlsVisible => _controlsVisible;
   /// 获取视频控制器
-  vp.VideoPlayerController? get videoController => _videoController;
+  VideoController? get videoController => _videoController;
 
   /// 状态流，用于监听播放器状态变化
   Stream<PlayerState> get stateStream => _stateController.stream;
   final _stateController = StreamController<PlayerState>.broadcast();
+  
+  /// 视频播放器监听器订阅
+  List<StreamSubscription> _videoPlayerSubscriptions = [];
+  /// 防止play方法递归调用的标志
+  bool _isPlaying = false;
+  /// 防止playMedia方法递归调用的标志
+  bool _isPlayingMedia = false;
 
   /// 构造函数，初始化音频播放器
   PlayerController() {
@@ -94,11 +104,11 @@ class PlayerController extends ChangeNotifier {
   /// [item] 媒体项
   /// [autoPlay] 是否自动播放
   Future<void> playMedia(MediaItem item, {bool autoPlay = true}) async {
-    print('playMedia 被调用，项目: ${item.title}, 类型: ${item.type}, URI: ${item.uri}');
+    if (_isPlayingMedia) return;
+    
     try {
-      print('正在释放当前播放器...');
+      _isPlayingMedia = true;
       await disposeCurrentPlayer(); // 释放当前播放器
-      print('当前播放器已释放');
       
       // 更新状态为加载中
       _updateState(_state.copyWith(
@@ -109,21 +119,17 @@ class PlayerController extends ChangeNotifier {
         buffered: Duration.zero,
         clearError: true,
       ));
-      print('状态已更新为加载中');
 
       // 根据媒体类型初始化对应的播放器
       if (item.type == MediaType.video) {
-        print('正在初始化视频播放器...');
         await _initVideoPlayer(item, autoPlay: autoPlay);
-        print('视频播放器已初始化');
       } else {
-        print('正在初始化音频播放器...');
         await _initAudioPlayerSource(item, autoPlay: autoPlay);
-        print('音频播放器已初始化');
       }
     } catch (e) {
-      print('Error in playMedia: $e');
       _handleError('Failed to play media: $e');
+    } finally {
+      _isPlayingMedia = false;
     }
   }
 
@@ -131,117 +137,120 @@ class PlayerController extends ChangeNotifier {
   /// [item] 媒体项
   /// [autoPlay] 是否自动播放
   Future<void> _initVideoPlayer(MediaItem item, {bool autoPlay = true}) async {
+    // 创建局部变量来存储播放器实例，避免在异步操作中被意外修改
+    mk.Player? localPlayer;
+    VideoController? localController;
+    List<StreamSubscription> localSubscriptions = [];
+    
     try {
-      print('Initializing video player for: ${item.uri}');
-      print('Is local: ${item.isLocal}, Is network: ${item.isNetwork}');
-      
-      // 释放现有的视频控制器
+      // 释放现有的视频播放器
+      if (_videoPlayer != null) {
+        await _videoPlayer!.dispose();
+        _videoPlayer = null;
+      }
       if (_videoController != null) {
-        _videoController!.removeListener(_onVideoEvent);
-        await _videoController!.dispose();
         _videoController = null;
       }
       
-      // 处理网络视频
-      if (item.isNetwork) {
-        print('创建网络视频控制器');
-        try {
-          _videoController = vp.VideoPlayerController.networkUrl(
-            Uri.parse(item.uri),
-            httpHeaders: item.headers ?? {},
-          );
-          _videoController!.addListener(_onVideoEvent);
-          await _videoController!.initialize();
-          
-          if (!_videoController!.value.isInitialized) {
-            throw Exception('网络视频控制器初始化失败');
-          }
-        } catch (e) {
-          print('网络视频控制器错误: $e');
-          if (_videoController != null) {
-            await _videoController!.dispose();
-            _videoController = null;
-          }
-          throw e;
-        }
-      } else {
-        // 处理本地视频
-        print('创建本地视频控制器');
-        final file = File(item.uri);
-        print('文件路径: ${item.uri}');
-        print('文件存在: ${file.existsSync()}');
-        if (!file.existsSync()) {
-          throw Exception('文件不存在: ${item.uri}');
-        }
-        
-        // 只使用 VideoPlayerController.file 方法初始化本地视频
-        try {
-          _videoController = vp.VideoPlayerController.file(file);
-          _videoController!.addListener(_onVideoEvent);
-          await _videoController!.initialize();
-          
-          if (!_videoController!.value.isInitialized) {
-            throw Exception('本地视频控制器初始化失败');
-          }
-        } catch (e) {
-          print('本地视频控制器错误: $e');
-          if (_videoController != null) {
-            await _videoController!.dispose();
-            _videoController = null;
-          }
-          throw e;
-        }
+      // 清除之前的订阅
+      for (var subscription in _videoPlayerSubscriptions) {
+        subscription.cancel();
       }
-
-      print('视频控制器已创建');
-      print('视频控制器初始化成功');
-      print('视频时长: ${_videoController!.value.duration}');
-      print('视频宽高比: ${_videoController!.value.aspectRatio}');
-      print('视频是否播放中: ${_videoController!.value.isPlaying}');
-      print('视频是否有错误: ${_videoController!.value.hasError}');
-      if (_videoController!.value.hasError) {
-        print('视频错误: ${_videoController!.value.errorDescription}');
-      }
+      _videoPlayerSubscriptions.clear();
+      
+      // 创建新的播放器
+      localPlayer = mk.Player();
+      localController = VideoController(localPlayer);
+      
+      // 监听视频播放器状态变化
+      localSubscriptions.add(
+        localPlayer.stream.playing.listen((playing) {
+          if (_disposed || _videoPlayer == null) return;
+          _updateState(_state.copyWith(status: playing ? PlayerStatus.playing : PlayerStatus.paused));
+        })
+      );
+      
+      // 监听播放位置变化
+      localSubscriptions.add(
+        localPlayer.stream.position.listen((position) {
+          if (_disposed || _videoPlayer == null) return;
+          _updateState(_state.copyWith(position: position));
+        })
+      );
+      
+      // 监听时长变化
+      localSubscriptions.add(
+        localPlayer.stream.duration.listen((duration) {
+          if (_disposed || _videoPlayer == null) return;
+          _updateState(_state.copyWith(duration: duration ?? Duration.zero));
+        })
+      );
+      
+      // 监听播放完成
+      localSubscriptions.add(
+        localPlayer.stream.completed.listen((completed) {
+          if (_disposed || _videoPlayer == null) return;
+          if (completed) {
+            _onPlaybackComplete();
+          }
+        })
+      );
+      
+      // 设置播放源
+      await localPlayer.open(mk.Media(item.uri));
+      
+      // 设置音量和播放速度
+      // media_kit的音量范围是0-100，所以需要将0-1的音量值转换为0-100
+      final mediaKitVolume = _state.isMuted ? 0.0 : _state.volume * 100;
+      await localPlayer.setVolume(mediaKitVolume);
+      await localPlayer.setRate(_state.speed);
       
       if (_disposed) {
-        await _videoController!.dispose();
-        _videoController = null;
+        await localPlayer.dispose();
+        for (var subscription in localSubscriptions) {
+          subscription.cancel();
+        }
         return;
       }
 
-      await _videoController!.setVolume(_state.isMuted ? 0 : _state.volume);
-      await _videoController!.setPlaybackSpeed(_state.speed);
+      // 将局部变量赋值给成员变量
+      _videoPlayer = localPlayer;
+      _videoController = localController;
+      _videoPlayerSubscriptions = localSubscriptions;
 
       _updateState(_state.copyWith(
         status: autoPlay ? PlayerStatus.playing : PlayerStatus.paused,
-        duration: _videoController!.value.duration,
+        duration: _videoPlayer!.state.duration ?? Duration.zero,
       ));
 
       if (autoPlay) {
-        print('开始视频播放...');
         try {
-          await _videoController!.play();
-          print('视频播放已开始');
-          print('播放后 - 是否播放中: ${_videoController!.value.isPlaying}');
-          print('播放后 - 是否有错误: ${_videoController!.value.hasError}');
-          if (_videoController!.value.hasError) {
-            print('播放后 - 错误: ${_videoController!.value.errorDescription}');
-          }
+          await _videoPlayer!.play();
           WakelockPlus.enable();
         } catch (e) {
-          print('开始播放错误: $e');
           // Don't throw here, just log the error and continue
+          print('开始播放错误: $e');
         }
       }
 
       _startPositionTimer();
     } catch (e) {
-      print('初始化视频播放器错误: $e');
       _handleError('初始化视频播放器失败: $e');
-      if (_videoController != null) {
-        await _videoController!.dispose();
-        _videoController = null;
+      
+      // 释放局部播放器实例
+      if (localPlayer != null) {
+        await localPlayer.dispose();
       }
+      
+      // 取消局部订阅
+      for (var subscription in localSubscriptions) {
+        subscription.cancel();
+      }
+      
+      // 确保成员变量被重置
+      _videoPlayer = null;
+      _videoController = null;
+      
       rethrow;
     }
   }
@@ -269,195 +278,55 @@ class PlayerController extends ChangeNotifier {
     _startPositionTimer();
   }
 
-  /// 视频事件监听回调
-  void _onVideoEvent() {
-    if (_videoController == null || _disposed) return;
-
-    final value = _videoController!.value;
-    
-    print('_onVideoEvent 被调用');
-    print('视频值: isInitialized=${value.isInitialized}, isPlaying=${value.isPlaying}, hasError=${value.hasError}');
-    if (value.hasError) {
-      print('视频错误: ${value.errorDescription}');
-    }
-    
-    PlayerStatus newStatus = _state.status;
-    if (value.isInitialized) {
-      if (value.hasError) {
-        newStatus = PlayerStatus.error;
-        _handleError('视频播放器错误: ${value.errorDescription}');
-        // 不要重新初始化，因为这会导致无限循环
-        // _reinitializeVideoPlayer();
-      } else if (value.isBuffering) {
-        newStatus = PlayerStatus.buffering;
-      } else if (value.isPlaying) {
-        newStatus = PlayerStatus.playing;
-      } else if (_state.position >= _state.duration && _state.duration > Duration.zero) {
-        newStatus = PlayerStatus.completed;
-      } else {
-        newStatus = PlayerStatus.paused;
-      }
-    } else {
-      print('视频控制器未初始化');
-      newStatus = PlayerStatus.loading;
-      // 尝试重新初始化视频播放器
-      _reinitializeVideoPlayer();
-    }
-
-    _updateState(_state.copyWith(
-      status: newStatus,
-      position: value.position,
-      duration: value.duration,
-      buffered: value.buffered.isNotEmpty 
-          ? value.buffered.last.end 
-          : Duration.zero,
-    ));
-
-    if (value.isPlaying) {
-      WakelockPlus.enable();
-    } else {
-      WakelockPlus.disable();
-    }
-
-    if (newStatus == PlayerStatus.completed) {
-      _onPlaybackComplete();
-    }
-  }
-
-  void _reinitializeVideoPlayer() {
-    if (_disposed || _state.currentItem == null || _state.currentItem!.type != MediaType.video) {
-      return;
-    }
-    
-    // Only try to reinitialize if we haven't tried recently
-    if (_lastReinitializeTime != null && DateTime.now().difference(_lastReinitializeTime!).inSeconds < 2) {
-      return;
-    }
-    
-    _lastReinitializeTime = DateTime.now();
-    print('尝试重新初始化视频播放器...');
-    
-    // Create a new controller and initialize it
-    final currentItem = _state.currentItem!;
-    
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        print('重新初始化视频播放器: ${currentItem}');
-        
-        // Dispose the current controller
-        if (_videoController != null) {
-          _videoController!.removeListener(_onVideoEvent);
-          await _videoController!.dispose();
-          _videoController = null;
-        }
-        
-        // Create a new controller
-        late vp.VideoPlayerController newController;
-        bool initialized = false;
-        
-        if (currentItem.isNetwork) {
-          newController = vp.VideoPlayerController.networkUrl(
-            Uri.parse(currentItem.uri),
-            httpHeaders: currentItem.headers ?? {},
-          );
-          _videoController = newController;
-          _videoController!.addListener(_onVideoEvent);
-          await _videoController!.initialize();
-          initialized = _videoController!.value.isInitialized;
-        } else {
-          final file = File(currentItem.uri);
-          if (file.existsSync()) {
-            print('文件存在: ${currentItem.uri}');
-            // Try different approaches for local files
-            List<Function> initMethods = [
-              () => vp.VideoPlayerController.file(file),
-              () => vp.VideoPlayerController.networkUrl(Uri.file(currentItem.uri)),
-              () => vp.VideoPlayerController.networkUrl(Uri.parse('file://${currentItem.uri}')),
-            ];
-            
-            Exception? lastError;
-            for (var method in initMethods) {
-              try {
-                print('尝试初始化方法: $method');
-                newController = method();
-                
-                // Test if this controller works
-                if (_videoController != null) {
-                  _videoController!.removeListener(_onVideoEvent);
-                  await _videoController!.dispose();
-                }
-                _videoController = newController;
-                _videoController!.addListener(_onVideoEvent);
-                await _videoController!.initialize();
-                
-                if (_videoController!.value.isInitialized) {
-                  print('初始化成功，方法: $method');
-                  initialized = true;
-                  break;
-                }
-              } catch (e) {
-                print('初始化方法失败: $e');
-                lastError = e as Exception;
-                if (_videoController != null) {
-                  await _videoController!.dispose();
-                  _videoController = null;
-                }
-              }
-            }
-          } else {
-            print('文件不存在: ${currentItem.uri}');
-            _handleError('文件不存在: ${currentItem.uri}');
-            return;
-          }
-        }
-        
-        if (initialized && _videoController != null) {
-          print('Video player reinitialized successfully');
-          await _videoController!.setVolume(_state.isMuted ? 0 : _state.volume);
-          await _videoController!.setPlaybackSpeed(_state.speed);
-          
-          // Update state to reflect that video player is initialized
-          _updateState(_state.copyWith(
-            status: _videoController!.value.isPlaying ? PlayerStatus.playing : PlayerStatus.paused,
-            duration: _videoController!.value.duration,
-            position: _videoController!.value.position,
-          ));
-          
-          // If we were playing before, resume playback
-          if (_state.status == PlayerStatus.playing) {
-            await _videoController!.play();
-          }
-        } else {
-          print('Failed to reinitialize video player');
-          _handleError('Failed to reinitialize video player');
-        }
-      } catch (e) {
-        print('Error reinitializing video player: $e');
-        _handleError('Error reinitializing video player: $e');
-      }
-    });
-  }
-  
-  DateTime? _lastReinitializeTime;
-
   Future<void> play() async {
-    if (_state.currentItem == null) return;
+    if (_state.currentItem == null || _isPlaying) return;
 
     try {
-      if (_state.currentItem!.type == MediaType.video && _videoController != null) {
-        await _videoController!.play();
+      _isPlaying = true;
+      if (_state.currentItem!.type == MediaType.video && _videoPlayer != null) {
+        // 检查_videoPlayer是否仍然有效
+        try {
+          // 再次检查_videoPlayer是否为null，因为可能在异步操作期间被释放
+          if (_videoPlayer != null) {
+            // 使用局部变量来确保在异步操作中不会被修改
+            final player = _videoPlayer;
+            if (player != null) {
+              await player.play();
+            } else {
+              await playMedia(_state.currentItem!);
+            }
+          } else {
+            await playMedia(_state.currentItem!);
+          }
+        } catch (e) {
+          // 如果播放器已被释放，重新初始化
+          if (e.toString().contains('has been disposed')) {
+            await playMedia(_state.currentItem!);
+          } else {
+            _handleError('播放视频失败: $e');
+          }
+        }
       } else if (_state.currentItem!.type == MediaType.audio && _audioPlayer != null) {
         await _audioPlayer!.resume();
       }
     } catch (e) {
       _handleError('Failed to play: $e');
+    } finally {
+      _isPlaying = false;
     }
   }
 
   Future<void> pause() async {
     try {
-      if (_videoController != null) {
-        await _videoController!.pause();
+      if (_videoPlayer != null) {
+        try {
+          await _videoPlayer!.pause();
+        } catch (e) {
+          // 如果播放器已被释放，忽略错误
+          if (!e.toString().contains('has been disposed')) {
+            _handleError('暂停视频失败: $e');
+          }
+        }
       }
       if (_audioPlayer != null) {
         await _audioPlayer!.pause();
@@ -480,8 +349,15 @@ class PlayerController extends ChangeNotifier {
     if (position > _state.duration) position = _state.duration;
 
     try {
-      if (_state.currentItem?.type == MediaType.video && _videoController != null) {
-        await _videoController!.seekTo(position);
+      if (_state.currentItem?.type == MediaType.video && _videoPlayer != null) {
+        try {
+          await _videoPlayer!.seek(position);
+        } catch (e) {
+          // 如果播放器已被释放，忽略错误
+          if (!e.toString().contains('has been disposed')) {
+            _handleError('视频跳转失败: $e');
+          }
+        }
       } else if (_state.currentItem?.type == MediaType.audio && _audioPlayer != null) {
         await _audioPlayer!.seek(position);
       }
@@ -503,11 +379,13 @@ class PlayerController extends ChangeNotifier {
     volume = volume.clamp(0.0, 1.0);
     
     try {
-      if (_videoController != null) {
-        await _videoController!.setVolume(_state.isMuted ? 0 : volume);
+      // media_kit的音量范围是0-100，所以需要将0-1的音量值转换为0-100
+      final mediaKitVolume = _state.isMuted ? 0.0 : volume * 100;
+      if (_videoPlayer != null) {
+        await _videoPlayer!.setVolume(mediaKitVolume);
       }
       if (_audioPlayer != null) {
-        await _audioPlayer!.setVolume(_state.isMuted ? 0 : volume);
+        await _audioPlayer!.setVolume(_state.isMuted ? 0.0 : volume);
       }
       _updateState(_state.copyWith(volume: volume));
     } catch (e) {
@@ -519,8 +397,8 @@ class PlayerController extends ChangeNotifier {
     speed = speed.clamp(0.5, 2.0);
     
     try {
-      if (_videoController != null) {
-        await _videoController!.setPlaybackSpeed(speed);
+      if (_videoPlayer != null) {
+        await _videoPlayer!.setRate(speed);
       }
       if (_audioPlayer != null) {
         await _audioPlayer!.setPlaybackRate(speed);
@@ -533,14 +411,16 @@ class PlayerController extends ChangeNotifier {
 
   Future<void> toggleMute() async {
     final newMuted = !_state.isMuted;
-    final volume = newMuted ? 0.0 : _state.volume;
+    // media_kit的音量范围是0-100，所以需要将0-1的音量值转换为0-100
+    final mediaKitVolume = newMuted ? 0.0 : _state.volume * 100;
+    final audioVolume = newMuted ? 0.0 : _state.volume;
     
     try {
-      if (_videoController != null) {
-        await _videoController!.setVolume(volume);
+      if (_videoPlayer != null) {
+        await _videoPlayer!.setVolume(mediaKitVolume);
       }
       if (_audioPlayer != null) {
-        await _audioPlayer!.setVolume(volume);
+        await _audioPlayer!.setVolume(audioVolume);
       }
       _updateState(_state.copyWith(isMuted: newMuted));
     } catch (e) {
@@ -602,10 +482,34 @@ class PlayerController extends ChangeNotifier {
     if (_state.position > const Duration(seconds: 3)) {
       await seek(Duration.zero);
     } else {
-      final prevItem = _playlist.previous(
-        mode: _state.playMode,
-        shuffle: _state.isShuffleEnabled,
-      );
+      final currentItem = _playlist.currentItem;
+      MediaItem? prevItem;
+      
+      // 如果当前播放的是音频，只寻找上一个音频项目
+      if (currentItem?.type == MediaType.audio) {
+        // 尝试找到上一个音频项目
+        for (int i = 0; i < _playlist.length; i++) {
+          prevItem = _playlist.previous(
+            mode: _state.playMode,
+            shuffle: _state.isShuffleEnabled,
+          );
+          if (prevItem == null) {
+            // 没有更多项目了
+            break;
+          }
+          if (prevItem.type == MediaType.audio) {
+            // 找到音频项目，停止搜索
+            break;
+          }
+        }
+      } else {
+        // 其他类型（视频）正常寻找上一个项目
+        prevItem = _playlist.previous(
+          mode: _state.playMode,
+          shuffle: _state.isShuffleEnabled,
+        );
+      }
+      
       if (prevItem != null) {
         await playMedia(prevItem);
       }
@@ -646,7 +550,6 @@ class PlayerController extends ChangeNotifier {
   /// 设置播放列表项目
   void setPlaylistItems(List<MediaItem> items, {int startIndex = 0}) {
     _playlist.setItems(items, startIndex: startIndex);
-    print('播放列表已更新，长度: ${items.length}, 开始索引: $startIndex');
   }
 
   void cyclePlayMode() {
@@ -691,12 +594,6 @@ class PlayerController extends ChangeNotifier {
     _positionTimer?.cancel();
     _positionTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
       if (_disposed) return;
-      
-      if (_state.currentItem?.type == MediaType.video && _videoController != null) {
-        // Video position is handled by listener
-      } else if (_state.currentItem?.type == MediaType.audio && _audioPlayer != null) {
-        // Audio position is handled by listener
-      }
     });
   }
 
@@ -733,9 +630,17 @@ class PlayerController extends ChangeNotifier {
   Future<void> disposeCurrentPlayer() async {
     _positionTimer?.cancel();
     
+    // 取消所有视频播放器监听器订阅
+    for (var subscription in _videoPlayerSubscriptions) {
+      subscription.cancel();
+    }
+    _videoPlayerSubscriptions.clear();
+    
+    if (_videoPlayer != null) {
+      await _videoPlayer!.dispose();
+      _videoPlayer = null;
+    }
     if (_videoController != null) {
-      _videoController!.removeListener(_onVideoEvent);
-      await _videoController!.dispose();
       _videoController = null;
     }
     
@@ -753,8 +658,14 @@ class PlayerController extends ChangeNotifier {
     _hideControlsTimer?.cancel();
     _stateController.close();
     
-    _videoController?.removeListener(_onVideoEvent);
-    _videoController?.dispose();
+    // 取消所有视频播放器监听器订阅
+    for (var subscription in _videoPlayerSubscriptions) {
+      subscription.cancel();
+    }
+    _videoPlayerSubscriptions.clear();
+    
+    _videoPlayer?.dispose();
+    _videoController = null;
     _audioPlayer?.dispose();
     
     WakelockPlus.disable();

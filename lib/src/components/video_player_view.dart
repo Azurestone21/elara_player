@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart' as vp;
+import 'package:media_kit_video/media_kit_video.dart';
 import '../models/models.dart';
 
 /// 视频播放器视图组件
-class VideoPlayerView extends StatelessWidget {
+class VideoPlayerView extends StatefulWidget {
   /// 视频控制器
-  final vp.VideoPlayerController? controller;
+  final VideoController? controller;
   /// 播放器状态
   final PlayerState state;
   /// 点击回调
@@ -20,10 +20,14 @@ class VideoPlayerView extends StatelessWidget {
   });
 
   @override
+  State<VideoPlayerView> createState() => _VideoPlayerViewState();
+}
+
+class _VideoPlayerViewState extends State<VideoPlayerView> {
+  @override
   Widget build(BuildContext context) {
 
-    if (controller == null) {
-      print('控制器为空');
+    if (widget.controller == null) {
       return Container(
         color: Colors.black,
         child: const Center(
@@ -36,13 +40,26 @@ class VideoPlayerView extends StatelessWidget {
     // 这允许视频播放器处理自己的状态并可能恢复
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         color: Colors.black,
         child: Center(
           child: AspectRatio(
-            aspectRatio: controller!.value.isInitialized ? controller!.value.aspectRatio : 16/9,
-            child: vp.VideoPlayer(controller!),
+            aspectRatio: 16/9,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned.fill(
+                  child: Video(controller: widget.controller!),
+                ),
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: widget.onTap,
+                    behavior: HitTestBehavior.opaque,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
