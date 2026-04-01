@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../models/models.dart';
-import '../services/services.dart';
-import '../components/components.dart';
-import '../widgets/widgets.dart';
-import 'player_page.dart';
-import 'music_detail_page.dart';
-import 'video_tab.dart';
-import 'music_tab.dart';
+import '../../models/models.dart';
+import '../../services/services.dart';
+import '../../components/components.dart';
+import '../../widgets/widgets.dart';
+import '../video_player/video_player_page.dart';
+import '../music_player/music_player_page.dart';
+import 'widgets/video_tab.dart';
+import 'widgets/music_tab.dart';
 
 /// 首页组件
 class HomePage extends ConsumerStatefulWidget {
@@ -478,7 +478,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const MusicDetailPage(),
+            const MusicPlayerPage(),
         transitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
@@ -513,7 +513,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PlayerPage(
+        builder: (context) => VideoPlayerPage(
           playlist: categoryItems,
           startIndex: startIndex
         ),

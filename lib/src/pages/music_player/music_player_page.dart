@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:path/path.dart' as path;
-import '../models/models.dart';
-import '../widgets/widgets.dart';
-import '../services/services.dart';
+import 'package:elara_player/src/models/models.dart';
+import 'package:elara_player/src/widgets/widgets.dart';
+import 'package:elara_player/src/services/services.dart';
 
 class LyricLine {
   final Duration time;
@@ -19,14 +19,14 @@ class LyricLine {
   });
 }
 
-class MusicDetailPage extends ConsumerStatefulWidget {
-  const MusicDetailPage({super.key});
+class MusicPlayerPage extends ConsumerStatefulWidget {
+  const MusicPlayerPage({super.key});
 
   @override
-  ConsumerState<MusicDetailPage> createState() => _MusicDetailPageState();
+  ConsumerState<MusicPlayerPage> createState() => _MusicPlayerPageState();
 }
 
-class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
+class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
   List<LyricLine> _lyrics = [];
   int _currentLyricIndex = -1;
   final ScrollController _lyricScrollController = ScrollController();

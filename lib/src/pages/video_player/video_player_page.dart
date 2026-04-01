@@ -4,27 +4,27 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
-import '../models/models.dart';
-import '../services/services.dart';
-import '../utils/utils.dart';
-import '../widgets/widgets.dart';
-import '../components/components.dart';
+import 'package:elara_player/src/models/models.dart';
+import 'package:elara_player/src/services/services.dart';
+import 'package:elara_player/src/utils/utils.dart';
+import 'package:elara_player/src/widgets/widgets.dart';
+import 'package:elara_player/src/components/components.dart';
 
-class PlayerPage extends ConsumerStatefulWidget {
+class VideoPlayerPage extends ConsumerStatefulWidget {
   final List<MediaItem>? playlist;
   final int startIndex;
 
-  const PlayerPage({
+  const VideoPlayerPage({
     super.key,
     this.playlist,
     this.startIndex = 0,
   });
 
   @override
-  ConsumerState<PlayerPage> createState() => _PlayerPageState();
+  ConsumerState<VideoPlayerPage> createState() => _VideoPlayerPageState();
 }
 
-class _PlayerPageState extends ConsumerState<PlayerPage> {
+class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
   bool _isSeeking = false;
   Timer? _seekDebounceTimer;
 
