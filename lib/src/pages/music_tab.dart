@@ -9,6 +9,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:audiotags/audiotags.dart';
 
+import '../components/add_primary_btn.dart';
+
 class MusicTab extends ConsumerWidget {
   final CategoryService categoryService;
   final String selectedCategoryId;
@@ -76,17 +78,9 @@ class MusicTab extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton.icon(
+          AddPrimaryBtn(
+            icon: Icons.add,
             onPressed: () => _pickFiles(context, ref),
-            icon: const Icon(Icons.add),
-            label: const Text('添加歌曲'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
           ),
         ],
       ),
