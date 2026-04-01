@@ -28,7 +28,10 @@ class AddPrimaryBtn extends StatelessWidget {
     final iconStyle = commonStyle.copyWith(
       shape: MaterialStateProperty.all(const CircleBorder()),
       padding: MaterialStateProperty.all(
-        const EdgeInsets.all(12),
+        const EdgeInsets.all(0),
+      ),
+      minimumSize: MaterialStateProperty.all(
+        const Size(40, 40),
       ),
     );
 
