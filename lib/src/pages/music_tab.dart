@@ -189,6 +189,7 @@ class MusicTab extends ConsumerWidget {
     Function(MediaItem) onMusicSelected,
   ) {
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       leading: Container(
         width: 40,
         height: 40,

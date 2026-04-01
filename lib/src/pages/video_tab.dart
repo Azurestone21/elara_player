@@ -157,6 +157,7 @@ class VideoTab extends ConsumerWidget {
     Function(MediaItem) onVideoSelected,
   ) {
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       leading: Container(
         width: 40,
         height: 40,
@@ -170,12 +171,6 @@ class VideoTab extends ConsumerWidget {
         item.title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Text(
-        item.artist ?? 'Unknown Artist',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 12, color: Colors.grey),
       ),
       onTap: () => onVideoSelected(item),
       trailing: PopupMenuButton<String>(
