@@ -348,43 +348,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => windowManager.minimize(),
-                  icon: const Icon(Icons.remove, size: 16),
-                  padding: EdgeInsets.zero,
-                  iconSize: 16,
-                  constraints:
-                      const BoxConstraints(minWidth: 40, minHeight: 40),
-                  tooltip: '最小化',
-                ),
-                IconButton(
-                  onPressed: () async {
-                    if (await windowManager.isMaximized()) {
-                      await windowManager.unmaximize();
-                    } else {
-                      await windowManager.maximize();
-                    }
-                  },
-                  icon: const Icon(Icons.square_outlined, size: 16),
-                  padding: EdgeInsets.zero,
-                  iconSize: 16,
-                  constraints:
-                      const BoxConstraints(minWidth: 40, minHeight: 40),
-                  tooltip: '最大化',
-                ),
-                IconButton(
-                  onPressed: () => windowManager.close(),
-                  icon: const Icon(Icons.close, size: 16),
-                  padding: EdgeInsets.zero,
-                  iconSize: 16,
-                  constraints:
-                      const BoxConstraints(minWidth: 40, minHeight: 40),
-                  tooltip: '关闭',
-                ),
-              ],
-            ),
+            const WindowControls(),
           ],
         ),
       ),

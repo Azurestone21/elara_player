@@ -146,41 +146,7 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
               ),
             ),
             // Window controls
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => windowManager.minimize(),
-                  icon: const Icon(Icons.remove, size: 16, color: Colors.white),
-                  padding: EdgeInsets.zero,
-                  iconSize: 16,
-                  constraints:
-                      const BoxConstraints(minWidth: 40, minHeight: 40),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    if (await windowManager.isMaximized()) {
-                      await windowManager.unmaximize();
-                    } else {
-                      await windowManager.maximize();
-                    }
-                  },
-                  icon: const Icon(Icons.square_outlined,
-                      size: 16, color: Colors.white),
-                  padding: EdgeInsets.zero,
-                  iconSize: 16,
-                  constraints:
-                      const BoxConstraints(minWidth: 40, minHeight: 40),
-                ),
-                IconButton(
-                  onPressed: () => windowManager.close(),
-                  icon: const Icon(Icons.close, size: 16, color: Colors.white),
-                  padding: EdgeInsets.zero,
-                  iconSize: 16,
-                  constraints:
-                      const BoxConstraints(minWidth: 40, minHeight: 40),
-                ),
-              ],
-            ),
+            const WindowControls(color: Colors.white),
           ],
         ),
       ),

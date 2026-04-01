@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:elara_player/src/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
@@ -268,38 +269,7 @@ class _MusicDetailPageState extends ConsumerState<MusicDetailPage> {
             ),
           ),
           // Window controls
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => windowManager.minimize(),
-                icon: Icon(Icons.remove, size: 16, color: Colors.grey[800]),
-                padding: EdgeInsets.zero,
-                iconSize: 16,
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (await windowManager.isMaximized()) {
-                    await windowManager.unmaximize();
-                  } else {
-                    await windowManager.maximize();
-                  }
-                },
-                icon: Icon(Icons.square_outlined,
-                    size: 16, color: Colors.grey[800]),
-                padding: EdgeInsets.zero,
-                iconSize: 16,
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-              ),
-              IconButton(
-                onPressed: () => windowManager.close(),
-                icon: Icon(Icons.close, size: 16, color: Colors.grey[800]),
-                padding: EdgeInsets.zero,
-                iconSize: 16,
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-              ),
-            ],
-          ),
+          const WindowControls(),
         ],
       ),
     );
