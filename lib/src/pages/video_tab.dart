@@ -118,19 +118,9 @@ class VideoTab extends ConsumerWidget {
     Function(MediaItem) onVideoSelected,
   ) {
     if (mediaItems.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.video_library_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-            const SizedBox(height: 16),
-            const Text('没有视频'),
-          ],
-        ),
+      return const EmptyState(
+        message: '没有视频',
+        icon: Icons.video_library_outlined,
       );
     }
 

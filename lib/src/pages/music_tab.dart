@@ -150,19 +150,9 @@ class MusicTab extends ConsumerWidget {
     Function(MediaItem) onMusicSelected,
   ) {
     if (mediaItems.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.music_note_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-            const SizedBox(height: 16),
-            const Text('没有歌曲'),
-          ],
-        ),
+      return const EmptyState(
+        message: '没有歌曲',
+        icon: Icons.music_note_outlined,
       );
     }
 
