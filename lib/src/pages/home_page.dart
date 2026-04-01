@@ -224,7 +224,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     ? Theme.of(context)
                                         .colorScheme
                                         .primary
-                                        .withOpacity(0.7)
+                                        // .withOpacity(0.7)
                                     : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -259,7 +259,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     ? Theme.of(context)
                                         .colorScheme
                                         .primary
-                                        .withOpacity(0.7)
+                                        // .withOpacity(0.7)
                                     : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(8),
