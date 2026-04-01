@@ -1,3 +1,4 @@
+import 'package:elara_player/src/components/add_primary_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:elara_player/src/models/media_item.dart';
@@ -8,8 +9,6 @@ import 'package:elara_player/src/components/category_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:audiotags/audiotags.dart';
-
-import '../components/add_primary_btn.dart';
 
 class MusicTab extends ConsumerWidget {
   final CategoryService categoryService;
