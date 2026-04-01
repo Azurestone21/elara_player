@@ -1,4 +1,4 @@
-import 'package:elara_player/src/components/add_primary_btn.dart';
+import 'package:elara_player/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:elara_player/src/models/media_item.dart';
