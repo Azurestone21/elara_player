@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:window_manager/window_manager.dart';
 import 'package:elara_player/src/models/models.dart';
 import 'package:elara_player/src/services/services.dart';
 import 'package:elara_player/src/utils/utils.dart';
@@ -96,60 +95,16 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: UniversalPlatform.isWindows && !state.isFullscreen
-          ? _buildWindowsAppBar()
+          ? WindowsAppBar(
+              title: state.currentItem?.title,
+              bgColor: Colors.black,
+              color: Colors.white,
+              onBackBefore: () {
+                controller.pause();
+              },
+            )
           : null,
       body: _buildPlayerBody(controller, state),
-    );
-  }
-
-  PreferredSizeWidget _buildWindowsAppBar() {
-    final controller = ref.watch(playerControllerProvider);
-    final state = controller.state;
-
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(40),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          border:
-              Border(bottom: BorderSide(color: Colors.grey[800]!, width: 1)),
-        ),
-        child: Row(
-          children: [
-            // Back button
-            IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.arrow_back, size: 16, color: Colors.white),
-              padding: EdgeInsets.zero,
-              iconSize: 16,
-              constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-            ),
-            // Draggable area with title
-            Expanded(
-              child: GestureDetector(
-                onPanStart: (details) => windowManager.startDragging(),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 8),
-                    Text(
-                      state.currentItem?.title ?? 'Elara Player',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Window controls
-            const WindowControls(color: Colors.white),
-          ],
-        ),
-      ),
     );
   }
 
