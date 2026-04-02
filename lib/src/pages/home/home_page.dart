@@ -458,20 +458,19 @@ class _HomePageState extends ConsumerState<HomePage> {
     final categoryService = ref.read(categoryServiceProvider);
 
     // 获取当前分类的所有视频项目
-    final categoryItems = categoryService.getMediaItemsByCategory(_selectedVideoCategoryId!);
+    final categoryItems =
+        categoryService.getMediaItemsByCategory(_selectedVideoCategoryId!);
 
     // 设置播放列表，从当前选中的视频开始播放
     final startIndex = categoryItems.indexOf(item);
-    controller.setPlaylistItems(categoryItems, startIndex: startIndex >= 0 ? startIndex : 0);
+    controller.setPlaylistItems(categoryItems,
+        startIndex: startIndex >= 0 ? startIndex : 0);
 
-    
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(
-          playlist: categoryItems,
-          startIndex: startIndex
-        ),
+        builder: (context) =>
+            VideoPlayerPage(playlist: categoryItems, startIndex: startIndex),
       ),
     );
   }
