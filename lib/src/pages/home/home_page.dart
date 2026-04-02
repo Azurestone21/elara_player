@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:window_manager/window_manager.dart';
 
 import '../../models/models.dart';
 import '../../services/services.dart';
@@ -73,7 +72,14 @@ class _HomePageState extends ConsumerState<HomePage> {
       length: 2,
       child: Scaffold(
         appBar: UniversalPlatform.isWindows
-            ? _buildWindowsAppBar()
+            ? WindowsAppBar(
+                hideBackButton: true,
+                leftWidget: Row(
+                  children: [
+                    _buildTogglePlayerMode(),
+                    Expanded(child: _buildSearchBar()),
+                  ],
+                ))
             : AppBar(
                 title: const Text('Elara Player'),
                 bottom: TabBar(
@@ -174,183 +180,132 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  PreferredSizeWidget _buildWindowsAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(40),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          color: Theme.of(context).appBarTheme.backgroundColor,
-          border:
-              Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
-        ),
-        child: Row(
-          children: [
-            GestureDetector(
-              onPanStart: (details) => windowManager.startDragging(),
-              child: Row(
-                children: [
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Elara Player',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
+  // 切换播放模式组件
+  Widget _buildTogglePlayerMode() {
+    return Container(
+      height: 28,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+            color: Theme.of(context).colorScheme.outline.withOpacity(0.5)),
+      ),
+      child: Row(
+        children: [
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => setState(() => _currentTab = 1),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: _currentTab == 1
+                      ? Theme.of(context).colorScheme.primary
+                      // .withOpacity(0.7)
+                      : Colors.transparent,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
                   ),
-                  const SizedBox(width: 24),
-                  Container(
-                    height: 28,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .outline
-                              .withOpacity(0.5)),
-                    ),
-                    child: Row(
-                      children: [
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () => setState(() => _currentTab = 1),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: _currentTab == 1
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        // .withOpacity(0.7)
-                                    : Colors.transparent,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                ),
-                              ),
-                              child: Text(
-                                'Music',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: _currentTab == 1
-                                      ? Colors.white
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: _currentTab == 1
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () => setState(() => _currentTab = 0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: _currentTab == 0
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        // .withOpacity(0.7)
-                                    : Colors.transparent,
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                              ),
-                              child: Text(
-                                'Videos',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: _currentTab == 0
-                                      ? Colors.white
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: _currentTab == 0
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onPanStart: (details) => windowManager.startDragging(),
-                child: Center(
-                  child: Container(
-                    width: 200,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey[300]!),
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(
-                          Icons.search,
-                          size: 14,
-                          color: Colors.grey[400],
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '搜索...',
-                              hintStyle: TextStyle(
-                                  fontSize: 12, color: Colors.grey[400]),
-                              isDense: true,
-                            ),
-                            style: const TextStyle(fontSize: 12),
-                            onChanged: (value) {
-                              setState(() {
-                                _searchQuery = value;
-                              });
-                            },
-                          ),
-                        ),
-                        if (_searchQuery.isNotEmpty)
-                          MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _searchQuery = '';
-                                });
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: Icon(Icons.clear,
-                                    size: 14, color: Colors.grey[400]),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
+                ),
+                child: Text(
+                  'Music',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: _currentTab == 1
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.onSurface,
+                    fontWeight:
+                        _currentTab == 1 ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
               ),
             ),
-            const WindowControls(),
-          ],
-        ),
+          ),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => setState(() => _currentTab = 0),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: _currentTab == 0
+                      ? Theme.of(context).colorScheme.primary
+                      // .withOpacity(0.7)
+                      : Colors.transparent,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Videos',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: _currentTab == 0
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.onSurface,
+                    fontWeight:
+                        _currentTab == 0 ? FontWeight.w600 : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 搜索栏组件
+  Widget _buildSearchBar() {
+    return Container(
+      height: 28,
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 12),
+          Icon(Icons.search, size: 14, color: Colors.grey[400]),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: '搜索...',
+                hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                isDense: true,
+              ),
+              style: const TextStyle(fontSize: 12),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
+          if (_searchQuery.isNotEmpty)
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _searchQuery = '';
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Icon(Icons.clear, size: 14, color: Colors.grey[400]),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
