@@ -651,17 +651,20 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Progress bar
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: ProgressBarWithTime(
-                position: state.position,
-                duration: state.duration,
-                buffered: state.buffered,
-                onSeek: (position) => playerController.seek(position),
+            // 进度条
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: ProgressBarWithTime(
+                  position: state.position,
+                  duration: state.duration,
+                  buffered: state.buffered,
+                  onSeek: (position) => playerController.seek(position),
+                ),
               ),
             ),
-            // Controls
+            // 控制按钮
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
@@ -671,26 +674,29 @@ class _HomePageState extends ConsumerState<HomePage> {
                     Row(
                       children: [
                         Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                          ),
-                          child: state.currentItem!.thumbnailUrl != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Image.network(
-                                    state.currentItem!.thumbnailUrl!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) =>
-                                        _buildMusicPlaceholder(),
-                                  ),
-                                )
-                              : _buildMusicPlaceholder(),
-                        ),
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                            ),
+                            child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: state.currentItem!.thumbnailUrl != null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: Image.network(
+                                            state.currentItem!.thumbnailUrl!,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) =>
+                                                _buildMusicPlaceholder(),
+                                          ),
+                                        )
+                                      : _buildMusicPlaceholder(),
+                                )),
                         const SizedBox(width: 12),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
