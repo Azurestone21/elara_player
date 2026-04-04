@@ -26,11 +26,11 @@ class CustomDropdownButton<T> extends StatelessWidget {
       underline: const SizedBox(), // 去掉下划线
       style: const TextStyle(
         fontSize: 16,
-        color: Colors.black,
+        // color: Colors.black,
       ),
       borderRadius: BorderRadius.circular(8), // 圆角
       focusColor: Colors.transparent, // 下拉框按钮背景颜色
-      dropdownColor: Colors.white, // 下拉菜单背景颜色
+      // dropdownColor: Colors.white, // 下拉菜单背景颜色
       // 下拉菜单图标
       icon: const Padding(
         padding: EdgeInsets.only(left: 4),
