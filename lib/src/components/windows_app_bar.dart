@@ -1,8 +1,7 @@
-import 'package:elara_player/src/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'components.dart';
+import '../src.dart';
 
 /// 自定义AppBar（桌面端）
 class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -42,7 +41,7 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(
                     onPressed: () {
                       onBackBefore?.call();
-                      Navigator.pop(context);
+                      AppRouter.pop();
                     },
                     icon: Icon(Icons.arrow_back,
                         size: 16, color: color ?? Colors.black),

@@ -241,7 +241,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
         children: [
           // Back button
           IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => AppRouter.pop(),
             icon: Icon(Icons.arrow_back, size: 16, color: Colors.grey[800]),
             padding: EdgeInsets.zero,
             iconSize: 16,

@@ -466,13 +466,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     controller.setPlaylistItems(categoryItems,
         startIndex: startIndex >= 0 ? startIndex : 0);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            VideoPlayerPage(playlist: categoryItems, startIndex: startIndex),
-      ),
-    );
+    AppRouter.push(Routes.videoPlayer, arguments: {
+      'playlist': categoryItems,
+      'startIndex': startIndex,
+    });
   }
 
   void _navigateToMusicDetail(MediaItem item) {
@@ -509,7 +506,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => AppRouter.pop(),
             child: const Text('取消'),
           ),
           FilledButton(
@@ -527,7 +524,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     _selectedAudioCategoryId = newCategory.id;
                   }
                 });
-                Navigator.pop(context);
+                AppRouter.pop();
               }
             },
             child: const Text('创建'),
@@ -562,7 +559,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: const Text('删除分类', style: TextStyle(color: Colors.red)),
             ),
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => AppRouter.pop(),
             child: const Text('取消'),
           ),
           FilledButton(
@@ -573,7 +570,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   id: category.id,
                   name: name,
                 );
-                Navigator.pop(context);
+                AppRouter.pop();
               }
             },
             child: const Text('保存'),
@@ -592,7 +589,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         content: Text('确定要删除分类"${category.name}"吗？该分类下的所有媒体文件将移动到默认分类。'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => AppRouter.pop(),
             child: const Text('取消'),
           ),
           FilledButton(
@@ -617,8 +614,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   }
                 }
               });
-              Navigator.pop(context);
-              Navigator.pop(context);
+              AppRouter.pop(true);
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('删除'),

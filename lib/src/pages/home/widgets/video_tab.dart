@@ -174,7 +174,7 @@ class VideoTab extends ConsumerWidget {
                     children: categories.map((category) {
                       return ListTile(
                         title: Text(category.name),
-                        onTap: () => Navigator.pop(context, category),
+                        onTap: () => AppRouter.pop(category),
                       );
                     }).toList(),
                   ),
@@ -194,11 +194,11 @@ class VideoTab extends ConsumerWidget {
                     content: const Text('确定要删除这个视频吗？'),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(context, false),
+                        onPressed: () => AppRouter.pop(false),
                         child: const Text('取消'),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.pop(context, true),
+                        onPressed: () => AppRouter.pop(true),
                         child: const Text('删除'),
                       ),
                     ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/models.dart';
-import '../services/services.dart';
+import '../src.dart';
 
 final categoryServiceProvider = ChangeNotifierProvider<CategoryService>((ref) {
   return CategoryService();
@@ -132,7 +131,7 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => AppRouter.pop(),
             child: const Text('取消'),
           ),
           FilledButton(
@@ -143,7 +142,7 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                   name: name,
                   type: widget.type,
                 );
-                Navigator.pop(context);
+                AppRouter.pop('create');
               }
             },
             child: const Text('创建'),
@@ -277,7 +276,7 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
             child: const Text('删除分类', style: TextStyle(color: Colors.red)),
           ),
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => AppRouter.pop(),
           child: const Text('取消'),
         ),
         FilledButton(
@@ -285,7 +284,7 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
             final name = _controller.text.trim();
             if (name.isNotEmpty) {
               widget.onCategoryUpdated(name);
-              Navigator.pop(context);
+              AppRouter.pop();
             }
           },
           child: const Text('保存'),
@@ -302,13 +301,12 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
         content: Text('确定要删除分类"${widget.category.name}"吗？该分类下的所有媒体文件将移动到默认分类。'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => AppRouter.pop(),
             child: const Text('取消'),
           ),
           FilledButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context, 'delete');
+              AppRouter.pop('delete');
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('删除'),
