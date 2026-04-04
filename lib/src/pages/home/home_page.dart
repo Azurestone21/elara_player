@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
-
-import '../../models/models.dart';
-import '../../services/services.dart';
-import '../../components/components.dart';
-import '../../widgets/widgets.dart';
-import '../video_player/video_player_page.dart';
-import '../music_player/music_player_page.dart';
+import 'package:elara_player/src/src.dart';
 import 'widgets/video_tab.dart';
 import 'widgets/music_tab.dart';
 

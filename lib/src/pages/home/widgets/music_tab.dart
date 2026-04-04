@@ -1,14 +1,10 @@
-import 'package:elara_player/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:elara_player/src/models/media_item.dart';
-import 'package:elara_player/src/models/category.dart';
-import 'package:elara_player/src/services/category_service.dart';
-import 'package:elara_player/src/services/player_controller.dart';
-import 'package:elara_player/src/components/category_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:audiotags/audiotags.dart';
+
+import '../../../src.dart';
 
 class MusicTab extends ConsumerWidget {
   final CategoryService categoryService;

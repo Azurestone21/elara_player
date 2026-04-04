@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:elara_player/src/models/models.dart';
-import 'package:elara_player/src/services/services.dart';
-import 'package:elara_player/src/utils/utils.dart';
-import 'package:elara_player/src/widgets/widgets.dart';
-import 'package:elara_player/src/components/components.dart';
+import '../../src.dart';
 
 class VideoPlayerPage extends ConsumerStatefulWidget {
   final List<MediaItem>? playlist;

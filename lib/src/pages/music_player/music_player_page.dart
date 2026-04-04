@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:elara_player/src/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:path/path.dart' as path;
-import 'package:elara_player/src/models/models.dart';
-import 'package:elara_player/src/widgets/widgets.dart';
-import 'package:elara_player/src/services/services.dart';
+import '../../src.dart';
 
 class LyricLine {
   final Duration time;
