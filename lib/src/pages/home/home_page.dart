@@ -259,21 +259,28 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Container(
       height: 28,
       margin: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(6),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.grey[100],
+      //   borderRadius: BorderRadius.circular(6),
+      // ),
       child: Row(
         children: [
           const SizedBox(width: 12),
-          Icon(Icons.search, size: 14, color: Colors.grey[400]),
+          const Icon(
+            Icons.search,
+            size: 14,
+            // color: Colors.grey[400],
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: '搜索...',
-                hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                hintStyle: TextStyle(
+                  fontSize: 12,
+                  // color: Colors.grey[400],
+                ),
                 isDense: true,
               ),
               style: const TextStyle(fontSize: 12),
@@ -293,9 +300,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                     _searchQuery = '';
                   });
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Icon(Icons.clear, size: 14, color: Colors.grey[400]),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Icon(
+                    Icons.clear,
+                    size: 14,
+                    // color: Colors.grey[400],
+                  ),
                 ),
               ),
             ),

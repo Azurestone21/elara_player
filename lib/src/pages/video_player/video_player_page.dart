@@ -93,8 +93,6 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
       appBar: UniversalPlatform.isWindows && !state.isFullscreen
           ? WindowsAppBar(
               title: state.currentItem?.title,
-              bgColor: Colors.black,
-              color: Colors.white,
               onBackBefore: () {
                 controller.pause();
               },

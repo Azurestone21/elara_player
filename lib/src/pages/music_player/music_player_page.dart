@@ -200,16 +200,16 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFF5F7FA),
-              Color(0xFFE4E8EC),
-            ],
-          ),
-        ),
+        // decoration: const BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //     colors: [
+        //       Color(0xFFF5F7FA),
+        //       Color(0xFFE4E8EC),
+        //     ],
+        //   ),
+        // ),
         child: Column(
           children: [
             // Windows 标题栏
@@ -320,10 +320,10 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
           // 歌曲名称
           Text(
             item?.title ?? 'Unknown Title',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+              // color: Colors.grey[800],
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -333,9 +333,9 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
           // 歌手
           Text(
             item?.artist ?? 'Unknown Artist',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
-              color: Colors.grey[600],
+              // color: Colors.grey[600],
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -404,7 +404,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               style: TextStyle(
                 fontSize: isCurrent ? 18 : 14,
                 fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                color: isCurrent ? Colors.grey[800] : Colors.grey[500],
+                // color: isCurrent ? Colors.grey[800] : Colors.grey[500],
               ),
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -431,9 +431,9 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               // 当前时间
               Text(
                 _formatDuration(state.position),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[600],
+                  // color: Colors.grey[600],
                 ),
               ),
               const SizedBox(width: 16),
@@ -450,9 +450,9 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               // 总时间
               Text(
                 _formatDuration(state.duration),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[600],
+                  // color: Colors.grey[600],
                 ),
               ),
             ],
@@ -468,7 +468,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
                     ref.read(playerControllerProvider).cyclePlayMode(),
                 icon: Icon(
                   _getPlayModeIcon(state.playMode),
-                  color: Colors.grey[700],
+                  // color: Colors.grey[700],
                   size: 20,
                 ),
               ),
@@ -476,9 +476,9 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               // 上一首
               IconButton(
                 onPressed: () => ref.read(playerControllerProvider).previous(),
-                icon: Icon(
+                icon: const Icon(
                   Icons.skip_previous,
-                  color: Colors.grey[800],
+                  // color: Colors.grey[800],
                   size: 32,
                 ),
               ),
@@ -505,9 +505,9 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               // 下一首
               IconButton(
                 onPressed: () => ref.read(playerControllerProvider).next(),
-                icon: Icon(
+                icon: const Icon(
                   Icons.skip_next,
-                  color: Colors.grey[800],
+                  // color: Colors.grey[800],
                   size: 32,
                 ),
               ),
@@ -529,7 +529,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
           onPressed: () => ref.read(playerControllerProvider).toggleMute(),
           icon: Icon(
             state.isMuted ? Icons.volume_off : Icons.volume_up,
-            color: Colors.grey[700],
+            // color: Colors.grey[700],
             size: 20,
           ),
         ),
@@ -538,8 +538,8 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
           child: Slider(
             value: state.isMuted ? 0 : state.volume,
             onChanged: _handleVolumeChange,
-            activeColor: Colors.grey[700],
-            inactiveColor: Colors.grey[400],
+            // activeColor: Colors.grey[700],
+            // inactiveColor: Colors.grey[400],
           ),
         ),
       ],

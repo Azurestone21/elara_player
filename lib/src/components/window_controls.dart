@@ -13,7 +13,11 @@ class WindowControls extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () => windowManager.minimize(),
-          icon: Icon(Icons.remove, size: 16, color: color),
+          icon: const Icon(
+            Icons.remove,
+            size: 16,
+            // color: color ?? Colors.black
+          ),
           padding: EdgeInsets.zero,
           iconSize: 16,
           constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -27,7 +31,11 @@ class WindowControls extends StatelessWidget {
               await windowManager.maximize();
             }
           },
-          icon: Icon(Icons.square_outlined, size: 16, color: color),
+          icon: const Icon(
+            Icons.square_outlined,
+            size: 16,
+            // color: color ?? Colors.black
+          ),
           padding: EdgeInsets.zero,
           iconSize: 16,
           constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -35,7 +43,11 @@ class WindowControls extends StatelessWidget {
         ),
         IconButton(
           onPressed: () => windowManager.close(),
-          icon: Icon(Icons.close, size: 16, color: color),
+          icon: const Icon(
+            Icons.close,
+            size: 16,
+            // color: color ?? Colors.black
+          ),
           padding: EdgeInsets.zero,
           iconSize: 16,
           constraints: const BoxConstraints(minWidth: 40, minHeight: 40),

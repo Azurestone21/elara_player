@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF6366F1);
-  static const Color secondaryColor = Color(0xFF8B5CF6);
-  static const Color accentColor = Color(0xFFEC4899);
+  static const Color defaultPrimaryColor = Color(0xFF6366F1);
+  static const Color defaultSecondaryColor = Color(0xFF8B5CF6);
+  static const Color defaultAccentColor = Color(0xFFE56268);
 
   static const Color darkBackground = Color(0xFF0F0F0F);
   static const Color darkSurface = Color(0xFF1A1A1A);
@@ -14,11 +14,14 @@ class AppTheme {
   static const Color lightSurface = Color(0xFFFFFFFF);
   static const Color lightCard = Color(0xFFF1F5F9);
 
-  static ThemeData get darkTheme {
+  static ThemeData darkTheme({
+    Color primaryColor = defaultPrimaryColor,
+    Color secondaryColor = defaultSecondaryColor,
+  }) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: ColorScheme.dark(
         primary: primaryColor,
         secondary: secondaryColor,
         surface: darkSurface,
@@ -69,19 +72,22 @@ class AppTheme {
     );
   }
 
-  static ThemeData get lightTheme {
+  static ThemeData lightTheme({
+    Color primaryColor = defaultPrimaryColor,
+    Color secondaryColor = defaultSecondaryColor,
+  }) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      colorScheme: const ColorScheme.light(
+      colorScheme: ColorScheme.light(
         primary: primaryColor,
         secondary: secondaryColor,
         surface: lightSurface,
         background: lightBackground,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onSurface: Color(0xFF1E293B),
-        onBackground: Color(0xFF1E293B),
+        onSurface: const Color(0xFF1E293B),
+        onBackground: const Color(0xFF1E293B),
       ),
       scaffoldBackgroundColor: lightBackground,
       cardTheme: CardTheme(

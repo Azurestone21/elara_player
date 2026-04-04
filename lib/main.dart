@@ -45,14 +45,25 @@ void main() async {
   );
 }
 
-class ElaraPlayerApp extends StatelessWidget {
+class ElaraPlayerApp extends ConsumerWidget {
   const ElaraPlayerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeSettings = ref.watch(themeProvider);
+
     return MaterialApp(
       title: 'Elara Player',
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme(
+        primaryColor: themeSettings.primaryColor,
+        secondaryColor: themeSettings.secondaryColor,
+      ),
+      darkTheme: AppTheme.darkTheme(
+        primaryColor: themeSettings.primaryColor,
+        secondaryColor: themeSettings.secondaryColor,
+      ),
+      themeMode: themeSettings.themeMode,
       initialRoute: Routes.home,
       onGenerateRoute: AppRouter.onGenerateRoute,
       navigatorObservers: AppRouter.observers,

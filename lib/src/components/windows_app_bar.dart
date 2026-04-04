@@ -27,11 +27,11 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SizedBox(
       height: 40,
       child: Container(
-        decoration: BoxDecoration(
-          color: bgColor ?? Colors.white,
-          border:
-              Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
-        ),
+        // decoration: BoxDecoration(
+        //   color: bgColor ?? Colors.white,
+        //   border:
+        //       Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+        // ),
         child: Row(
           children: [
             hideBackButton
@@ -43,8 +43,11 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                       onBackBefore?.call();
                       AppRouter.pop();
                     },
-                    icon: Icon(Icons.arrow_back,
-                        size: 16, color: color ?? Colors.black),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      size: 16,
+                      // color: color ?? Colors.black
+                    ),
                     padding: EdgeInsets.zero,
                     iconSize: 16,
                     constraints:
@@ -59,10 +62,10 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPanStart: (details) => windowManager.startDragging(),
                 child: Text(
                   title ?? 'Elara Player',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: color ?? Colors.black,
+                    // color: color ?? Colors.black,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -92,15 +95,17 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 );
               },
-              icon: Icon(Icons.settings,
-                  size: 16,
-                  color: color ?? const Color.fromARGB(255, 116, 116, 116)),
+              icon: const Icon(
+                Icons.settings,
+                size: 16,
+                // color: color ?? const Color.fromARGB(255, 116, 116, 116)
+              ),
               padding: EdgeInsets.zero,
               iconSize: 16,
               constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
             ),
             // Window controls
-            WindowControls(color: color ?? Colors.black),
+            WindowControls(color: color),
           ],
         ),
       ),
