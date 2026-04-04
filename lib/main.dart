@@ -53,10 +53,10 @@ class ElaraPlayerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Elara Player',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      home: const HomePage(),
+      initialRoute: Routes.home,
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      navigatorObservers: AppRouter.observers,
+      navigatorKey: AppRouter.navigatorKey,
     );
   }
 }
