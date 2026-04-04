@@ -213,7 +213,9 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
         child: Column(
           children: [
             // Windows 标题栏
-            _buildWindowsAppBar(state),
+            WindowsAppBar(
+              title: state.currentItem?.title ?? '',
+            ),
             // 上半部分：歌曲信息和歌词
             Expanded(
               flex: 3,
@@ -223,51 +225,6 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
             _buildControlSection(state),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildWindowsAppBar(PlayerState state) {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
-      ),
-      child: Row(
-        children: [
-          // Back button
-          IconButton(
-            onPressed: () => AppRouter.pop(),
-            icon: Icon(Icons.arrow_back, size: 16, color: Colors.grey[800]),
-            padding: EdgeInsets.zero,
-            iconSize: 16,
-            constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-          ),
-          // Draggable area with title
-          Expanded(
-            child: GestureDetector(
-              onPanStart: (details) => windowManager.startDragging(),
-              child: Row(
-                children: [
-                  const SizedBox(width: 8),
-                  Text(
-                    state.currentItem?.title ?? 'Music Detail',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[800],
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Window controls
-          const WindowControls(),
-        ],
       ),
     );
   }
