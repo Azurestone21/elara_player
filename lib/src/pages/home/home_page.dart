@@ -72,6 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 hideBackButton: true,
                 leftWidget: Row(
                   children: [
+                    // 切换播放模式
                     _buildTogglePlayerMode(),
                     // Expanded(child: _buildSearchBar()),
                     const SizedBox(width: 8),
@@ -350,6 +351,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  /// 视频标签组件
   Widget _buildVideoTab(CategoryService categoryService) {
     if (_selectedVideoCategoryId == null) {
       return const Center(child: CircularProgressIndicator());
@@ -363,6 +365,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  /// 音乐标签组件
   Widget _buildMusicTab(CategoryService categoryService) {
     if (_selectedAudioCategoryId == null) {
       return const Center(child: CircularProgressIndicator());
