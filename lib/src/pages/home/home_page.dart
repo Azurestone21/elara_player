@@ -4,6 +4,7 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:elara_player/src/src.dart';
 import 'widgets/video_tab.dart';
 import 'widgets/music_tab.dart';
+import 'widgets/category_dialog.dart';
 
 /// 首页组件
 class HomePage extends ConsumerStatefulWidget {
@@ -120,11 +121,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
-                                    onTap: () => _showAddCategoryDialog(
-                                        _currentTab == 0
+                                    onTap: () => _showCategoryDialog(
+                                        type: _currentTab == 0
                                             ? MediaType.video
                                             : MediaType.audio,
-                                        categoryService),
+                                        categoryService: categoryService),
                                     child: Icon(
                                       Icons.add,
                                       size: 14,
@@ -326,8 +327,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                        onTap: () =>
-                            _showEditCategoryDialog(category, categoryService),
+                        onTap: () => _showCategoryDialog(
+                            category: category,
+                            categoryService: categoryService),
                         child: Icon(
                           Icons.edit,
                           size: 10,
@@ -440,137 +442,64 @@ class _HomePageState extends ConsumerState<HomePage> {
     controller.playMedia(item, autoPlay: true);
   }
 
-  void _showAddCategoryDialog(MediaType type, CategoryService categoryService) {
-    final controller = TextEditingController();
-
+  /// 新增/编辑分类弹窗
+  void _showCategoryDialog({
+    Category? category,
+    MediaType? type,
+    required CategoryService categoryService,
+  }) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('新建分类'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            labelText: '分类名称',
-            hintText: '请输入分类名称',
-          ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => AppRouter.pop(),
-            child: const Text('取消'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final name = controller.text.trim();
-              if (name.isNotEmpty) {
-                final newCategory = categoryService.createCategory(
-                  name: name,
-                  type: type,
-                );
+      builder: (context) => CategoryDialog(
+        category: category,
+        type: type,
+        onSubmit: (
+            {String? id, required String name, required MediaType type}) async {
+          if (id != null) {
+            // 编辑分类
+            categoryService.updateCategory(
+              id: id,
+              name: name,
+            );
+          } else {
+            // 创建分类
+            final newCategory = categoryService.createCategory(
+              name: name,
+              type: type,
+            );
+            setState(() {
+              if (type == MediaType.video) {
+                _selectedVideoCategoryId = newCategory.id;
+              } else {
+                _selectedAudioCategoryId = newCategory.id;
+              }
+            });
+          }
+        },
+        onDelete: category != null
+            ? (id) async {
+                categoryService.deleteCategory(id);
                 setState(() {
-                  if (type == MediaType.video) {
-                    _selectedVideoCategoryId = newCategory.id;
+                  if (category.type == MediaType.video) {
+                    final videoCategories =
+                        categoryService.getCategoriesByType(MediaType.video);
+                    if (videoCategories.isNotEmpty) {
+                      _selectedVideoCategoryId = videoCategories.first.id;
+                    } else {
+                      _selectedVideoCategoryId = null;
+                    }
                   } else {
-                    _selectedAudioCategoryId = newCategory.id;
+                    final audioCategories =
+                        categoryService.getCategoriesByType(MediaType.audio);
+                    if (audioCategories.isNotEmpty) {
+                      _selectedAudioCategoryId = audioCategories.first.id;
+                    } else {
+                      _selectedAudioCategoryId = null;
+                    }
                   }
                 });
-                AppRouter.pop();
               }
-            },
-            child: const Text('创建'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEditCategoryDialog(
-      Category category, CategoryService categoryService) {
-    final controller = TextEditingController(text: category.name);
-    final isDefault =
-        category.id == 'default_video' || category.id == 'default_audio';
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('编辑分类'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            labelText: '分类名称',
-          ),
-          enabled: !isDefault,
-        ),
-        actions: [
-          if (!isDefault)
-            TextButton(
-              onPressed: () =>
-                  _showDeleteConfirmDialog(category, categoryService),
-              child: const Text('删除分类', style: TextStyle(color: Colors.red)),
-            ),
-          TextButton(
-            onPressed: () => AppRouter.pop(),
-            child: const Text('取消'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final name = controller.text.trim();
-              if (name.isNotEmpty) {
-                categoryService.updateCategory(
-                  id: category.id,
-                  name: name,
-                );
-                AppRouter.pop();
-              }
-            },
-            child: const Text('保存'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteConfirmDialog(
-      Category category, CategoryService categoryService) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('确认删除'),
-        content: Text('确定要删除分类"${category.name}"吗？该分类下的所有媒体文件将移动到默认分类。'),
-        actions: [
-          TextButton(
-            onPressed: () => AppRouter.pop(),
-            child: const Text('取消'),
-          ),
-          FilledButton(
-            onPressed: () {
-              categoryService.deleteCategory(category.id);
-              setState(() {
-                if (category.type == MediaType.video) {
-                  final videoCategories =
-                      categoryService.getCategoriesByType(MediaType.video);
-                  if (videoCategories.isNotEmpty) {
-                    _selectedVideoCategoryId = videoCategories.first.id;
-                  } else {
-                    _selectedVideoCategoryId = null;
-                  }
-                } else {
-                  final audioCategories =
-                      categoryService.getCategoriesByType(MediaType.audio);
-                  if (audioCategories.isNotEmpty) {
-                    _selectedAudioCategoryId = audioCategories.first.id;
-                  } else {
-                    _selectedAudioCategoryId = null;
-                  }
-                }
-              });
-              AppRouter.pop(true);
-            },
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('删除'),
-          ),
-        ],
+            : null,
       ),
     );
   }
