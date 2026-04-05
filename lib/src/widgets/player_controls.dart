@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
-import '../models/models.dart';
-import 'progress_bar.dart';
+import '../src.dart';
 
 class PlayerControls extends StatelessWidget {
   final PlayerState state;
@@ -16,6 +15,7 @@ class PlayerControls extends StatelessWidget {
   final ValueChanged<double>? onSpeedChange;
   final VoidCallback? onToggleLock;
   final VoidCallback? onCyclePlayMode;
+  final CustomVideoColors? customColors;
 
   const PlayerControls({
     super.key,
@@ -31,6 +31,7 @@ class PlayerControls extends StatelessWidget {
     this.onSpeedChange,
     this.onToggleLock,
     this.onCyclePlayMode,
+    this.customColors,
   });
 
   @override
@@ -118,6 +119,7 @@ class PlayerControls extends StatelessWidget {
       duration: state.duration,
       buffered: state.buffered,
       onSeek: onSeek,
+      customColors: customColors,
     );
   }
 

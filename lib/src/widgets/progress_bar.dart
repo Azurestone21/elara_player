@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/utils.dart';
+import '../src.dart';
 
 class ProgressBar extends StatelessWidget {
   final Duration position;
@@ -8,6 +8,7 @@ class ProgressBar extends StatelessWidget {
   final ValueChanged<Duration>? onSeek;
   final VoidCallback? onSeekStart;
   final VoidCallback? onSeekEnd;
+  final CustomVideoColors? customColors;
 
   const ProgressBar({
     super.key,
@@ -17,11 +18,13 @@ class ProgressBar extends StatelessWidget {
     this.onSeek,
     this.onSeekStart,
     this.onSeekEnd,
+    this.customColors,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     final progress = duration.inMilliseconds > 0
         ? position.inMilliseconds / duration.inMilliseconds
         : 0.0;
@@ -114,6 +117,7 @@ class ProgressBarWithTime extends StatelessWidget {
   final ValueChanged<Duration>? onSeek;
   final VoidCallback? onSeekStart;
   final VoidCallback? onSeekEnd;
+  final CustomVideoColors? customColors;
 
   const ProgressBarWithTime({
     super.key,
@@ -123,6 +127,7 @@ class ProgressBarWithTime extends StatelessWidget {
     this.onSeek,
     this.onSeekStart,
     this.onSeekEnd,
+    this.customColors,
   });
 
   @override
@@ -140,13 +145,14 @@ class ProgressBarWithTime extends StatelessWidget {
             onSeek: onSeek,
             onSeekStart: onSeekStart,
             onSeekEnd: onSeekEnd,
+            customColors: customColors,
           ),
         ),
         const SizedBox(width: 20),
         Text(
           '${FormatUtils.formatDuration(position)} / ${FormatUtils.formatDuration(duration)}',
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: customColors?.timeColor ?? null,
             fontSize: 12,
           ),
         ),
