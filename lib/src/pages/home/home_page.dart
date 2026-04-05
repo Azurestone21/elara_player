@@ -72,7 +72,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                 leftWidget: Row(
                   children: [
                     _buildTogglePlayerMode(),
-                    Expanded(child: _buildSearchBar()),
+                    // Expanded(child: _buildSearchBar()),
+                    const SizedBox(width: 8),
+                    // 搜索栏
+                    CustomSearchBar(
+                      onChange: (query) {
+                        setState(() {
+                          _searchQuery = query;
+                        });
+                      },
+                     ),
                   ],
                 ))
             : AppBar(
@@ -251,67 +260,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  // 搜索栏组件
-  Widget _buildSearchBar() {
-    return Container(
-      height: 28,
-      margin: const EdgeInsets.symmetric(horizontal: 12),
-      // decoration: BoxDecoration(
-      //   color: Colors.grey[100],
-      //   borderRadius: BorderRadius.circular(6),
-      // ),
-      child: Row(
-        children: [
-          const SizedBox(width: 12),
-          const Icon(
-            Icons.search,
-            size: 14,
-            // color: Colors.grey[400],
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: '搜索...',
-                hintStyle: TextStyle(
-                  fontSize: 12,
-                  // color: Colors.grey[400],
-                ),
-                isDense: true,
-              ),
-              style: const TextStyle(fontSize: 12),
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-            ),
-          ),
-          if (_searchQuery.isNotEmpty)
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _searchQuery = '';
-                  });
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Icon(
-                    Icons.clear,
-                    size: 14,
-                    // color: Colors.grey[400],
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
+  /// 侧边栏组件
   Widget _buildSidebar(CategoryService categoryService) {
     final theme = Theme.of(context);
 
