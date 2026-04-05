@@ -13,7 +13,7 @@ class AppTheme {
 
   static const Color lightBackground = Color.fromARGB(255, 255, 247, 240);
   static const Color lightSurface = Color.fromARGB(255, 255, 249, 239);
-  static const Color lightCard = Color(0xFFF1F5F9);
+  static const Color lightCard = Color.fromARGB(255, 235, 228, 221);
 
   // 默认的自定义颜色（浅色主题）
   static const defaultCustomVideoColors = CustomVideoColors(

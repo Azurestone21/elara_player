@@ -21,13 +21,12 @@ class CustomDropdownButton<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DropdownButton<T>(
       value: initialSelection,
       underline: const SizedBox(), // 去掉下划线
-      style: const TextStyle(
-        fontSize: 16,
-        // color: Colors.black,
-      ),
+      style: theme.textTheme.titleMedium,
       borderRadius: BorderRadius.circular(8), // 圆角
       focusColor: Colors.transparent, // 下拉框按钮背景颜色
       // dropdownColor: Colors.white, // 下拉菜单背景颜色
@@ -45,7 +44,10 @@ class CustomDropdownButton<T> extends StatelessWidget {
       items: items.map((item) {
         return DropdownMenuItem<T>(
           value: item.value,
-          child: Text(item.label),
+          child: Text(
+            item.label,
+            style: theme.textTheme.titleSmall
+          ),
         );
       }).toList(),
     );
