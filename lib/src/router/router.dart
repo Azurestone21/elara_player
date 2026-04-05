@@ -89,6 +89,12 @@ class AppRouter {
   // ----- 导航方法（支持带参数）-----
   static Future<T?> push<T>(String routeName,
       {Map<String, dynamic>? arguments}) {
+    // 获取当前路由名称
+    final currentRouteName = AppRouter.currentRouteName;
+    if (currentRouteName == routeName) {
+      return Future.value(null); // 不跳转，直接返回
+    }
+
     final params = arguments != null ? RouteParams(arguments) : null;
     print('push: $routeName, ${params?.data}');
     return navigatorKey.currentState!.pushNamed<T>(
