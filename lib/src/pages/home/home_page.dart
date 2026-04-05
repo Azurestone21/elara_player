@@ -60,6 +60,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final categoryService = ref.watch(categoryServiceProvider);
 
     return DefaultTabController(
@@ -93,7 +94,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       width: 260,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: theme.colorScheme.surface,
                       child: Column(
                         children: [
                           Container(
@@ -103,12 +104,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                               children: [
                                 Text(
                                   '分类',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 MouseRegion(
                                   cursor: SystemMouseCursors.click,
@@ -121,8 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: Icon(
                                       Icons.add,
                                       size: 14,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -145,14 +142,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       },
                       child: Container(
                         width: 20,
-                        color: Theme.of(context).colorScheme.surface,
+                        color: theme.colorScheme.surface,
                         child: Center(
                           child: Icon(
                             _sidebarExpanded
                                 ? Icons.chevron_left
                                 : Icons.chevron_right,
                             size: 16,
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -176,12 +173,12 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   // 切换播放模式组件
   Widget _buildTogglePlayerMode() {
+    final theme = Theme.of(context);
     return Container(
       height: 28,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.5)),
+        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.5)),
       ),
       child: Row(
         children: [
@@ -195,7 +192,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: _currentTab == 1
-                      ? Theme.of(context).colorScheme.primary
+                      ? theme.colorScheme.primary
                       // .withOpacity(0.7)
                       : Colors.transparent,
                   borderRadius: const BorderRadius.only(
@@ -209,7 +206,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     fontSize: 12,
                     color: _currentTab == 1
                         ? Colors.white
-                        : Theme.of(context).colorScheme.onSurface,
+                        : theme.colorScheme.onSurface,
                     fontWeight:
                         _currentTab == 1 ? FontWeight.w600 : FontWeight.normal,
                   ),
@@ -227,7 +224,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: _currentTab == 0
-                      ? Theme.of(context).colorScheme.primary
+                      ? theme.colorScheme.primary
                       // .withOpacity(0.7)
                       : Colors.transparent,
                   borderRadius: const BorderRadius.only(
@@ -241,7 +238,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     fontSize: 12,
                     color: _currentTab == 0
                         ? Colors.white
-                        : Theme.of(context).colorScheme.onSurface,
+                        : theme.colorScheme.onSurface,
                     fontWeight:
                         _currentTab == 0 ? FontWeight.w600 : FontWeight.normal,
                   ),
@@ -316,6 +313,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildSidebar(CategoryService categoryService) {
+    final theme = Theme.of(context);
+
     final currentType = _currentTab == 0 ? MediaType.video : MediaType.audio;
     final categories = categoryService.getCategoriesByType(currentType);
     final selectedCategoryId =
@@ -364,14 +363,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                         fontWeight:
                             isSelected ? FontWeight.w600 : FontWeight.normal,
                         color: isSelected
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface,
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
                   if (isDefault) ...[
                     const SizedBox(width: 4),
-                    const Icon(Icons.star, size: 16, color: Colors.amber),
+                    // const Icon(Icons.star, size: 16, color: Colors.amber),
                   ],
                   if (!isDefault) ...[
                     const SizedBox(width: 4),
@@ -383,7 +382,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         child: Icon(
                           Icons.edit,
                           size: 10,
-                          color: Theme.of(context).colorScheme.outline,
+                          color: theme.colorScheme.outline,
                         ),
                       ),
                     ),
@@ -391,10 +390,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ],
               ),
               selected: isSelected,
-              selectedTileColor: Theme.of(context)
-                  .colorScheme
-                  .primaryContainer
-                  .withOpacity(0.3),
+              selectedTileColor:
+                  theme.colorScheme.primaryContainer.withOpacity(0.3),
             ),
           ),
         );
@@ -630,6 +627,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildMusicPlayerControls() {
+    final theme = Theme.of(context);
     final playerController = ref.watch(playerControllerProvider);
     final state = playerController.state;
 
@@ -642,26 +640,22 @@ class _HomePageState extends ConsumerState<HomePage> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: theme.colorScheme.surface,
           border: Border(
               top: BorderSide(
-                  color:
-                      Theme.of(context).colorScheme.outline.withOpacity(0.3))),
+                  color: theme.colorScheme.outline.withOpacity(0.3))),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // 进度条
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                child: ProgressBarWithTime(
-                  position: state.position,
-                  duration: state.duration,
-                  buffered: state.buffered,
-                  onSeek: (position) => playerController.seek(position),
-                ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: ProgressBarWithTime(
+                position: state.position,
+                duration: state.duration,
+                buffered: state.buffered,
+                onSeek: (position) => playerController.seek(position),
               ),
             ),
             // 控制按钮
@@ -678,25 +672,22 @@ class _HomePageState extends ConsumerState<HomePage> {
                             height: 48,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
+                              color: theme.colorScheme.secondaryContainer,
                             ),
                             child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: state.currentItem!.thumbnailUrl != null
-                                      ? ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          child: Image.network(
-                                            state.currentItem!.thumbnailUrl!,
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (_, __, ___) =>
-                                                _buildMusicPlaceholder(),
-                                          ),
-                                        )
-                                      : _buildMusicPlaceholder(),
-                                )),
+                              cursor: SystemMouseCursors.click,
+                              child: state.currentItem!.thumbnailUrl != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child: Image.network(
+                                        state.currentItem!.thumbnailUrl!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) =>
+                                            _buildMusicPlaceholder(),
+                                      ),
+                                    )
+                                  : _buildMusicPlaceholder(),
+                            )),
                         const SizedBox(width: 12),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -706,7 +697,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: theme.colorScheme.onSurface,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -715,9 +706,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               state.currentItem!.artist ?? 'Unknown Artist',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
+                                color: theme.colorScheme.onSurface
                                     .withOpacity(0.7),
                               ),
                               maxLines: 1,
@@ -739,7 +728,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         icon: Icon(
                           _getPlayModeIcon(state.playMode),
                           size: 18,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -752,11 +741,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Icons.skip_previous,
                           size: 24,
                           color: state.hasPrevious
-                              ? Theme.of(context).colorScheme.onSurface
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.3),
+                              ? theme.colorScheme.onSurface
+                              : theme.colorScheme.onSurface.withOpacity(0.3),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -768,7 +754,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         icon: Icon(
                           state.isPlaying ? Icons.pause : Icons.play_arrow,
                           size: 32,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -779,11 +765,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Icons.skip_next,
                           size: 24,
                           color: state.hasNext
-                              ? Theme.of(context).colorScheme.onSurface
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.3),
+                              ? theme.colorScheme.onSurface
+                              : theme.colorScheme.onSurface.withOpacity(0.3),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -799,11 +782,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                         icon: Icon(
                           state.isMuted ? Icons.volume_off : Icons.volume_up,
                           size: 18,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       // 音量滑块
-                      Container(
+                      SizedBox(
                         width: 100,
                         child: Slider(
                           value: state.volume,
@@ -811,11 +794,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                               playerController.setVolume(value),
                           min: 0.0,
                           max: 1.0,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                          inactiveColor: Theme.of(context)
-                              .colorScheme
-                              .outline
-                              .withOpacity(0.3),
+                          activeColor: theme.colorScheme.primary,
+                          inactiveColor:
+                              theme.colorScheme.outline.withOpacity(0.3),
                         ),
                       ),
                     ],
@@ -830,12 +811,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildMusicPlaceholder() {
+    final theme = Theme.of(context);
     return Container(
-      color: Theme.of(context).colorScheme.secondaryContainer,
+      color: theme.colorScheme.secondaryContainer,
       child: Icon(
         Icons.music_note,
         size: 24,
-        color: Theme.of(context).colorScheme.onSecondaryContainer,
+        color: theme.colorScheme.onSecondaryContainer,
       ),
     );
   }

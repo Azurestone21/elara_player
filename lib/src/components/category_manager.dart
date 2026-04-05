@@ -25,6 +25,7 @@ class CategoryManager extends ConsumerStatefulWidget {
 class _CategoryManagerState extends ConsumerState<CategoryManager> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final categoryService = ref.watch(categoryServiceProvider);
     final categories = categoryService.getCategoriesByType(widget.type);
 
@@ -40,18 +41,17 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
             children: [
               Text(
                 '分类管理',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
+                    color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.outline),
+                    border: Border.all(color: theme.colorScheme.outline),
                   ),
                   child: IconButton(
                     onPressed: () => _showAddCategoryDialog(categoryService),
@@ -83,7 +83,7 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                             style: const TextStyle(fontSize: 14)),
                         if (isDefault) ...[
                           const SizedBox(width: 6),
-                          const Icon(Icons.star, size: 14, color: Colors.amber),
+                          // const Icon(Icons.star, size: 14, color: Colors.amber),
                         ],
                       ],
                     ),
@@ -96,13 +96,12 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 10),
                     labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-                    selectedColor:
-                        Theme.of(context).colorScheme.primaryContainer,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    selectedColor: theme.colorScheme.primaryContainer,
+                    backgroundColor: theme.colorScheme.surface,
                     side: BorderSide(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.outline,
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline,
                     ),
                   ),
                 ),
@@ -167,6 +166,8 @@ class CategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (categories.isEmpty) {
       return const Center(
         child: Text('暂无分类'),
@@ -195,7 +196,7 @@ class CategorySelector extends StatelessWidget {
                       Text(category.name, style: const TextStyle(fontSize: 14)),
                       if (isDefault) ...[
                         const SizedBox(width: 6),
-                        const Icon(Icons.star, size: 14, color: Colors.amber),
+                        // const Icon(Icons.star, size: 14, color: Colors.amber),
                       ],
                     ],
                   ),
@@ -208,12 +209,12 @@ class CategorySelector extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-                  selectedColor: Theme.of(context).colorScheme.primaryContainer,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  selectedColor: theme.colorScheme.primaryContainer,
+                  backgroundColor: theme.colorScheme.surface,
                   side: BorderSide(
                     color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outline,
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outline,
                   ),
                   showCheckmark: false,
                 ),

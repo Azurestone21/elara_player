@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'custom_video_colors.dart';
 
 class AppTheme {
-  static const Color defaultPrimaryColor = Color(0xFF6366F1);
-  static const Color defaultSecondaryColor = Color(0xFF8B5CF6);
+  static const Color defaultPrimaryColor = Color.fromARGB(255, 233, 99, 46);
+  static const Color defaultSecondaryColor = Color.fromARGB(255, 255, 121, 37);
   static const Color defaultAccentColor = Color(0xFFE56268);
 
   static const Color darkBackground = Color(0xFF0F0F0F);
   static const Color darkSurface = Color(0xFF1A1A1A);
   static const Color darkCard = Color(0xFF262626);
 
-  static const Color lightBackground = Color(0xFFF8FAFC);
-  static const Color lightSurface = Color(0xFFFFFFFF);
+  static const Color lightBackground = Color.fromARGB(255, 255, 247, 240);
+  static const Color lightSurface = Color.fromARGB(255, 255, 249, 239);
   static const Color lightCard = Color(0xFFF1F5F9);
+
+  // 默认的自定义颜色（浅色主题）
+  static const defaultCustomVideoColors = CustomVideoColors(
+    progressBarBgColor: Colors.white24,
+    timeColor: Colors.white24,
+  );
 
   static ThemeData darkTheme({
     Color primaryColor = defaultPrimaryColor,
     Color secondaryColor = defaultSecondaryColor,
+    CustomVideoColors? customVideoColors,
   }) {
     return ThemeData(
       useMaterial3: true,
@@ -39,6 +47,7 @@ class AppTheme {
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -69,12 +78,19 @@ class AppTheme {
         trackHeight: 4,
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
       ),
+      extensions: [
+        customVideoColors ?? defaultCustomVideoColors,
+      ],
     );
   }
 
   static ThemeData lightTheme({
     Color primaryColor = defaultPrimaryColor,
     Color secondaryColor = defaultSecondaryColor,
+    Color iconColor = Colors.black,
+    Color textColor = const Color.fromARGB(255, 101, 101, 101),
+    Color textBodyLargeColor = defaultAccentColor,
+    CustomVideoColors? customVideoColors,
   }) {
     return ThemeData(
       useMaterial3: true,
@@ -86,8 +102,8 @@ class AppTheme {
         background: lightBackground,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onSurface: const Color(0xFF1E293B),
-        onBackground: const Color(0xFF1E293B),
+        onSurface: Color.fromARGB(255, 59, 41, 30),
+        onBackground: Color.fromARGB(255, 59, 44, 30),
       ),
       scaffoldBackgroundColor: lightBackground,
       cardTheme: CardTheme(
@@ -97,39 +113,31 @@ class AppTheme {
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
         elevation: 0,
         centerTitle: true,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
-      textTheme: const TextTheme(
+      iconTheme: IconThemeData(color: iconColor),
+      textTheme: TextTheme(
         headlineLarge: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1E293B)),
+            fontSize: 32, fontWeight: FontWeight.bold, color: textColor),
         headlineMedium: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1E293B)),
+            fontSize: 24, fontWeight: FontWeight.w600, color: textColor),
         headlineSmall: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1E293B)),
+            fontSize: 20, fontWeight: FontWeight.w600, color: textColor),
         titleLarge: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1E293B)),
+            fontSize: 18, fontWeight: FontWeight.w600, color: textColor),
         titleMedium: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF1E293B)),
+            fontSize: 16, fontWeight: FontWeight.w500, color: textColor),
         titleSmall: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF64748B)),
-        bodyLarge: TextStyle(fontSize: 16, color: Color(0xFF1E293B)),
-        bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
-        bodySmall: TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+            fontSize: 14, fontWeight: FontWeight.w500, color: textColor),
+        bodyLarge: const TextStyle(
+            fontSize: 16, color: Color.fromARGB(255, 59, 47, 30)),
+        bodyMedium: const TextStyle(
+            fontSize: 14, color: Color.fromARGB(255, 139, 123, 100)),
+        bodySmall: const TextStyle(
+            fontSize: 12, color: Color.fromARGB(255, 184, 165, 148)),
       ),
       sliderTheme: SliderThemeData(
         activeTrackColor: primaryColor,
@@ -139,6 +147,9 @@ class AppTheme {
         trackHeight: 4,
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
       ),
+      extensions: [
+        customVideoColors ?? defaultCustomVideoColors,
+      ],
     );
   }
 }

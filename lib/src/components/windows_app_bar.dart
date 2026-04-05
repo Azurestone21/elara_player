@@ -24,6 +24,8 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       height: 40,
       child: Container(
@@ -43,10 +45,10 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                       onBackBefore?.call();
                       AppRouter.pop();
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.arrow_back,
                       size: 16,
-                      // color: color ?? Colors.black
+                      color: color ?? theme.appBarTheme.foregroundColor,
                     ),
                     padding: EdgeInsets.zero,
                     iconSize: 16,
@@ -62,10 +64,10 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPanStart: (details) => windowManager.startDragging(),
                 child: Text(
                   title ?? 'Elara Player',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    // color: color ?? Colors.black,
+                    color: color ?? theme.appBarTheme.foregroundColor,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -95,10 +97,10 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 );
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.settings,
                 size: 16,
-                // color: color ?? const Color.fromARGB(255, 116, 116, 116)
+                color: color ?? theme.appBarTheme.foregroundColor,
               ),
               padding: EdgeInsets.zero,
               iconSize: 16,

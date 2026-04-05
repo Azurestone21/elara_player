@@ -96,6 +96,8 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
               onBackBefore: () {
                 controller.pause();
               },
+              color: Colors.white,
+              bgColor: Colors.black,
             )
           : null,
       body: _buildPlayerBody(controller, state),
@@ -103,6 +105,8 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
   }
 
   Widget _buildPlayerBody(PlayerController controller, PlayerState state) {
+    final customVideoColors = Theme.of(context).extension<CustomVideoColors>();
+
     return VolumeBrightnessGesture(
       onVolumeChange: _handleVolumeChange,
       child: PlayerGestureDetector(
@@ -159,6 +163,7 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
               onSpeedChange: _handleSpeedChange,
               onToggleLock: controller.toggleLock,
               onCyclePlayMode: controller.cyclePlayMode,
+              customColors: customVideoColors
             ),
           ],
         ),

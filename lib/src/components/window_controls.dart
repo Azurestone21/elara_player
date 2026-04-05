@@ -9,14 +9,16 @@ class WindowControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         IconButton(
           onPressed: () => windowManager.minimize(),
-          icon: const Icon(
+          icon: Icon(
             Icons.remove,
             size: 16,
-            // color: color ?? Colors.black
+            color: color ?? theme.appBarTheme.foregroundColor,
           ),
           padding: EdgeInsets.zero,
           iconSize: 16,
@@ -31,10 +33,10 @@ class WindowControls extends StatelessWidget {
               await windowManager.maximize();
             }
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.square_outlined,
             size: 16,
-            // color: color ?? Colors.black
+            color: color ?? theme.appBarTheme.foregroundColor,
           ),
           padding: EdgeInsets.zero,
           iconSize: 16,
@@ -43,10 +45,10 @@ class WindowControls extends StatelessWidget {
         ),
         IconButton(
           onPressed: () => windowManager.close(),
-          icon: const Icon(
+          icon: Icon(
             Icons.close,
             size: 16,
-            // color: color ?? Colors.black
+            color: color ?? theme.appBarTheme.foregroundColor,
           ),
           padding: EdgeInsets.zero,
           iconSize: 16,

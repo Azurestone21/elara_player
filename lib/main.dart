@@ -55,14 +55,8 @@ class ElaraPlayerApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Elara Player',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme(
-        primaryColor: themeSettings.primaryColor,
-        secondaryColor: themeSettings.secondaryColor,
-      ),
-      darkTheme: AppTheme.darkTheme(
-        primaryColor: themeSettings.primaryColor,
-        secondaryColor: themeSettings.secondaryColor,
-      ),
+      theme: AppTheme.lightTheme(),
+      darkTheme: AppTheme.darkTheme(),
       themeMode: themeSettings.themeMode,
       initialRoute: Routes.home,
       onGenerateRoute: AppRouter.onGenerateRoute,
