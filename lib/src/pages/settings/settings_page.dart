@@ -52,12 +52,12 @@ class SettingsPage extends ConsumerWidget {
                                 label: "系统主题",
                               ),
                               SelectItem(
-                                value: ThemeMode.dark,
-                                label: "暗黑主题",
-                              ),
-                              SelectItem(
                                 value: ThemeMode.light,
                                 label: "亮色主题",
+                              ),
+                                SelectItem(
+                                value: ThemeMode.dark,
+                                label: "暗黑主题",
                               ),
                             ],
                             initialSelection: themeSettings.themeMode,
