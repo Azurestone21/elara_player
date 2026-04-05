@@ -90,12 +90,7 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
             // 设置
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
-                  ),
-                );
+                AppRouter.push(Routes.settings);
               },
               icon: Icon(
                 Icons.settings,
