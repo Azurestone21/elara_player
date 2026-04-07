@@ -342,8 +342,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ],
               ),
               selected: isSelected,
-              selectedTileColor:
-                  theme.colorScheme.primaryContainer.withOpacity(0.3),
+              selectedTileColor: Colors.transparent,
             ),
           ),
         );
