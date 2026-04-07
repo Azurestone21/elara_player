@@ -101,66 +101,78 @@ class _HomePageState extends ConsumerState<HomePage> {
             Expanded(
               child: Row(
                 children: [
-                  if (_sidebarExpanded)
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: 260,
-                      color: theme.colorScheme.surface,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: _sidebarExpanded ? 260 : 0,
+                    color: theme.colorScheme.surface,
+                    clipBehavior: Clip.hardEdge,
+                    child: _sidebarExpanded
+                        ? OverflowBox(
+                            minWidth: 0,
+                            maxWidth: 260,
+                            alignment: Alignment.centerLeft,
+                            child: Column(
                               children: [
-                                Text(
-                                  '分类',
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 20, 16, 8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '分类',
+                                        style: theme.textTheme.titleSmall
+                                            ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: GestureDetector(
+                                          onTap: () => _showCategoryDialog(
+                                              type: _currentTab == 0
+                                                  ? MediaType.video
+                                                  : MediaType.audio,
+                                              categoryService: categoryService),
+                                          child: Icon(
+                                            Icons.add,
+                                            size: 14,
+                                            color: theme.colorScheme.primary,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: GestureDetector(
-                                    onTap: () => _showCategoryDialog(
-                                        type: _currentTab == 0
-                                            ? MediaType.video
-                                            : MediaType.audio,
-                                        categoryService: categoryService),
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 14,
-                                      color: theme.colorScheme.primary,
-                                    ),
-                                  ),
+                                Expanded(
+                                  child: _buildSidebar(categoryService),
                                 ),
                               ],
+                            ))
+                        : null,
+                  ),
+                  Transform.translate(
+                    offset: Offset(_sidebarExpanded ? -10 : 0, 0), // 向左移动一半宽度
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => setState(
+                            () => _sidebarExpanded = !_sidebarExpanded),
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              _sidebarExpanded
+                                  ? Icons.chevron_left
+                                  : Icons.chevron_right,
+                              size: 16,
                             ),
-                          ),
-                          Expanded(
-                            child: _buildSidebar(categoryService),
-                          ),
-                        ],
-                      ),
-                    ),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _sidebarExpanded = !_sidebarExpanded;
-                        });
-                      },
-                      child: Container(
-                        width: 20,
-                        color: theme.colorScheme.surface,
-                        child: Center(
-                          child: Icon(
-                            _sidebarExpanded
-                                ? Icons.chevron_left
-                                : Icons.chevron_right,
-                            size: 16,
-                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
