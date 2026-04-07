@@ -83,7 +83,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           _searchQuery = query;
                         });
                       },
-                     ),
+                    ),
                   ],
                 ))
             : AppBar(
