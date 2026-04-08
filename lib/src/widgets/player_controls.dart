@@ -81,7 +81,7 @@ class PlayerControls extends StatelessWidget {
       child: IconButton(
         onPressed: onToggleLock,
         icon: const Icon(Icons.lock_outline, color: Colors.white),
-        tooltip: 'Unlock',
+        tooltip: '解锁',
       ),
     );
   }
@@ -107,7 +107,7 @@ class PlayerControls extends StatelessWidget {
           IconButton(
             onPressed: onToggleLock,
             icon: const Icon(Icons.lock_open_outlined, color: Colors.white),
-            tooltip: 'Lock controls',
+            tooltip: '锁定',
           ),
       ],
     );
@@ -165,19 +165,19 @@ class PlayerControls extends StatelessWidget {
     switch (state.playMode) {
       case PlayMode.sequence:
         icon = Icons.repeat;
-        tooltip = 'Sequence';
+        tooltip = '顺序播放';
         break;
       case PlayMode.loop:
         icon = Icons.repeat;
-        tooltip = 'Loop all';
+        tooltip = '循环播放';
         break;
       case PlayMode.singleLoop:
         icon = Icons.repeat_one;
-        tooltip = 'Loop one';
+        tooltip = '单曲循环';
         break;
       case PlayMode.shuffle:
         icon = Icons.shuffle;
-        tooltip = 'Shuffle';
+        tooltip = '随机播放';
         break;
     }
 
@@ -216,7 +216,7 @@ class PlayerControls extends StatelessWidget {
               state.isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
               color: Colors.white,
             ),
-            tooltip: state.isFullscreen ? 'Exit fullscreen' : 'Fullscreen',
+            tooltip: state.isFullscreen ? '退出全屏模式' : '全屏模式',
           ),
       ],
     );
@@ -353,6 +353,7 @@ class _SpeedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<double>(
+      tooltip: '倍速',
       onSelected: onSpeedChange,
       itemBuilder: (context) => [
         const PopupMenuItem(value: 0.5, child: Text('0.5x')),
