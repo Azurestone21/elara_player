@@ -196,81 +196,18 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   // 切换播放模式组件
   Widget _buildTogglePlayerMode() {
-    final theme = Theme.of(context);
-    return Container(
-      height: 28,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.5)),
-      ),
-      child: Row(
-        children: [
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => setState(() => _currentTab = 1),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: _currentTab == 1
-                      ? theme.colorScheme.primary
-                      // .withOpacity(0.7)
-                      : Colors.transparent,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  'Music',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: _currentTab == 1
-                        ? Colors.white
-                        : theme.colorScheme.onSurface,
-                    fontWeight:
-                        _currentTab == 1 ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => setState(() => _currentTab = 0),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: _currentTab == 0
-                      ? theme.colorScheme.primary
-                      // .withOpacity(0.7)
-                      : Colors.transparent,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  'Videos',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: _currentTab == 0
-                        ? Colors.white
-                        : theme.colorScheme.onSurface,
-                    fontWeight:
-                        _currentTab == 0 ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return ButtonRadio(
+      value: _currentTab,
+      options: const [
+        {'value': 1, 'name': 'Music'},
+        {'value': 0, 'name': 'Video'},
+      ],
+      onChange: (value) {
+        setState(() => _currentTab = value);
+        // 重置播放器，清空当前播放项和播放列表
+        final playerController = ref.read(playerControllerProvider);
+        playerController.reset();
+      },
     );
   }
 

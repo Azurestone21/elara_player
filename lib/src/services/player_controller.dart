@@ -526,6 +526,19 @@ class PlayerController extends ChangeNotifier {
     _playlist.setItems(items, startIndex: startIndex);
   }
 
+  /// 重置播放器状态，清空当前播放项
+  void reset() {
+    pause();
+    _playlist.clear();
+    _updateState(_state.copyWith(
+      clearCurrentItem: true,
+      position: Duration.zero,
+      duration: Duration.zero,
+      buffered: Duration.zero,
+      status: PlayerStatus.idle,
+    ));
+  }
+
   void cyclePlayMode() {
     const modes = PlayMode.values;
     final nextIndex = (modes.indexOf(_state.playMode) + 1) % modes.length;

@@ -76,10 +76,11 @@ class PlayerState {
     bool? isShuffleEnabled,
     PlayMode? playMode,
     bool clearError = false,
+    bool clearCurrentItem = false,
   }) {
     return PlayerState(
       status: status ?? this.status,
-      currentItem: currentItem ?? this.currentItem,
+      currentItem: clearCurrentItem ? null : (currentItem ?? this.currentItem),
       position: position ?? this.position,
       duration: duration ?? this.duration,
       buffered: buffered ?? this.buffered,
