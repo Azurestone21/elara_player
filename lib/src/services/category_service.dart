@@ -16,13 +16,13 @@ class CategoryService extends ChangeNotifier {
     _categories.addAll([
       Category(
         id: 'default_video',
-        name: '默认分类',
+        name: '默认集合',
         type: MediaType.video,
         createdAt: DateTime.now(),
       ),
       Category(
         id: 'default_audio',
-        name: '默认分类',
+        name: '默认集合',
         type: MediaType.audio,
         createdAt: DateTime.now(),
       ),

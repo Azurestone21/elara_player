@@ -85,24 +85,24 @@ class _CategoryDialogState extends State<CategoryDialog> {
     final isDefault = _isDefault;
 
     return AlertDialog(
-      title: Text(isEditMode ? '编辑分类' : '新建分类'),
+      title: Text(isEditMode ? '编辑集合' : '新建集合'),
       content: TextField(
         controller: _nameController,
         decoration: InputDecoration(
-          labelText: '分类名称',
-          hintText: isEditMode ? null : '请输入分类名称',
+          labelText: '集合名称',
+          hintText: isEditMode ? null : '请输入集合名称',
         ),
         autofocus: true,
         enabled: !isDefault,
       ),
       actions: [
-        // 删除按钮（仅编辑模式且非默认分类显示）
+        // 删除按钮（仅编辑模式且非默认集合显示）
         if (isEditMode && !isDefault && widget.onDelete != null) ...[
           TextButton(
             onPressed: () {
               _showDeleteConfirmDialog();
             },
-            child: const Text('删除分类', style: TextStyle(color: Colors.red)),
+            child: const Text('删除集合', style: TextStyle(color: Colors.red)),
           ),
         ],
         
