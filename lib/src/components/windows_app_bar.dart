@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../src.dart';
 
 /// 自定义AppBar（桌面端）
-class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
+class WindowsAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final VoidCallback? onBackBefore;
   final Color? bgColor;
   final Color? color;
@@ -23,7 +24,7 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     return SizedBox(
@@ -94,6 +95,22 @@ class WindowsAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
               icon: Icon(
                 Icons.settings,
+                size: 16,
+                color: color ?? theme.appBarTheme.foregroundColor,
+              ),
+              padding: EdgeInsets.zero,
+              iconSize: 16,
+              constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+            ),
+
+            // 迷你窗口
+            IconButton(
+              onPressed: () async {
+                final appState = ref.read(appStateProvider);
+                await appState.enterMiniMode();
+              },
+              icon: Icon(
+                Icons.branding_watermark_outlined,
                 size: 16,
                 color: color ?? theme.appBarTheme.foregroundColor,
               ),
