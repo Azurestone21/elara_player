@@ -5,6 +5,7 @@ import 'package:path/path.dart' as path;
 import 'package:audiotags/audiotags.dart';
 
 import '../../../src.dart';
+import 'medio_list_tile.dart';
 
 class MusicTab extends ConsumerWidget {
   final CategoryService categoryService;
@@ -156,7 +157,7 @@ class MusicTab extends ConsumerWidget {
       itemCount: mediaItems.length,
       itemBuilder: (context, index) {
         final item = mediaItems[index];
-        return _buildMusicItem(context, ref, item, onMusicSelected);
+        return _buildMusicItem(context, ref, item, index, onMusicSelected);
       },
     );
   }
@@ -165,96 +166,19 @@ class MusicTab extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     MediaItem item,
+    int index,
     Function(MediaItem) onMusicSelected,
   ) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: Colors.grey[200],
-        ),
-        child: const Icon(Icons.music_note, size: 20, color: Colors.grey),
-      ),
-      title: Text(
-        item.title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Text(
-        item.artist ?? 'Unknown Artist',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 12, color: Colors.grey),
-      ),
-      onTap: () => onMusicSelected(item),
-      trailing: PopupMenuButton<String>(
-        onSelected: (value) async {
-          final categoryService = ref.read(categoryServiceProvider);
-
-          if (value == 'move') {
-            final categories =
-                categoryService.getCategoriesByType(MediaType.audio);
-            if (categories.isNotEmpty) {
-              final selectedCategory = await showDialog<Category>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('选择分类'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: categories.map((category) {
-                      return ListTile(
-                        title: Text(category.name),
-                        onTap: () => AppRouter.pop(category),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              );
-
-              if (selectedCategory != null) {
-                categoryService.moveMediaItemToCategory(
-                    item.id, selectedCategory.id);
-              }
-            }
-          } else if (value == 'delete') {
-            final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('确认删除'),
-                    content: const Text('确定要删除这首歌吗？'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => AppRouter.pop(false),
-                        child: const Text('取消'),
-                      ),
-                      TextButton(
-                        onPressed: () => AppRouter.pop(true),
-                        child: const Text('删除'),
-                      ),
-                    ],
-                  ),
-                ) ??
-                false;
-
-            if (confirmed) {
-              categoryService.removeMediaItem(item.id);
-            }
-          }
-        },
-        itemBuilder: (BuildContext context) => [
-          const PopupMenuItem<String>(
-            value: 'move',
-            child: Text('移动到分类'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'delete',
-            child: Text('删除'),
-          ),
-        ],
-      ),
+    return MedioListTile(
+      context: context,
+      ref: ref,
+      mediaType: MediaType.audio,
+      index: index,
+      id: item.id,
+      title: item.title,
+      subTitle: item.artist,
+      leadingChild: const Icon(Icons.music_note, size: 20, color: Colors.grey),
+      onSelected: () => onMusicSelected(item),
     );
   }
 }
