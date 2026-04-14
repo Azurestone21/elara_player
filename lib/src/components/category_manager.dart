@@ -40,7 +40,7 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '分类管理',
+                '集合管理',
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -56,7 +56,7 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
                   child: IconButton(
                     onPressed: () => _showAddCategoryDialog(categoryService),
                     icon: const Icon(Icons.add),
-                    tooltip: '新建分类',
+                    tooltip: '新建集合',
                   ),
                 ),
               ),
@@ -119,12 +119,12 @@ class _CategoryManagerState extends ConsumerState<CategoryManager> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('新建分类'),
+        title: const Text('新建集合'),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(
-            labelText: '分类名称',
-            hintText: '请输入分类名称',
+            labelText: '集合名称',
+            hintText: '请输入集合名称',
           ),
           autofocus: true,
         ),
@@ -170,7 +170,7 @@ class CategorySelector extends StatelessWidget {
 
     if (categories.isEmpty) {
       return const Center(
-        child: Text('暂无分类'),
+        child: Text('暂无集合'),
       );
     }
 
@@ -262,11 +262,11 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
         widget.category.id == 'default_audio';
 
     return AlertDialog(
-      title: const Text('编辑分类'),
+      title: const Text('编辑集合'),
       content: TextField(
         controller: _controller,
         decoration: const InputDecoration(
-          labelText: '分类名称',
+          labelText: '集合名称',
         ),
         enabled: !isDefault,
       ),
@@ -274,7 +274,7 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
         if (!isDefault)
           TextButton(
             onPressed: () => _showDeleteConfirmDialog(),
-            child: const Text('删除分类', style: TextStyle(color: Colors.red)),
+            child: const Text('删除集合', style: TextStyle(color: Colors.red)),
           ),
         TextButton(
           onPressed: () => AppRouter.pop(),
@@ -299,7 +299,7 @@ class _CategoryEditDialogState extends State<CategoryEditDialog> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('确认删除'),
-        content: Text('确定要删除分类"${widget.category.name}"吗？该分类下的所有媒体文件将移动到默认分类。'),
+        content: Text('确定要删除集合"${widget.category.name}"吗？该集合下的所有媒体文件将移动到默认集合。'),
         actions: [
           TextButton(
             onPressed: () => AppRouter.pop(),
