@@ -323,7 +323,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
       selectedCategoryId: _selectedAudioCategoryId!,
       searchQuery: _searchQuery,
       onCategorySelected: (id) => setState(() => _selectedAudioCategoryId = id),
-      onMusicSelected: (item) => _navigateToMusicDetail(item),
+      onMusicSelected: (item) async => await _navigateToMusicDetail(item),
     );
   }
 
@@ -376,21 +376,35 @@ class _WindowPageState extends ConsumerState<WindowPage> {
     });
   }
 
-  void _navigateToMusicDetail(MediaItem item) {
-    final controller = ref.read(playerControllerProvider);
+  Future<void> _navigateToMusicDetail(MediaItem item) async {
+    final controller = ref.read(playerControllerServiceProvider);
     final categoryService = ref.read(categoryServiceProvider);
 
-    // 获取当前分类的所有歌曲
-    final categoryItems =
-        categoryService.getMediaItemsByCategory(_selectedAudioCategoryId!);
+    try {
+      // 获取当前分类的所有歌曲
+      final categoryItems =
+          categoryService.getMediaItemsByCategory(_selectedAudioCategoryId!);
 
-    // 设置播放列表，从当前选中的歌曲开始播放
-    final startIndex = categoryItems.indexOf(item);
-    controller.setPlaylistItems(categoryItems,
-        startIndex: startIndex >= 0 ? startIndex : 0);
+      // 设置播放列表，从当前选中的歌曲开始播放
+      final startIndex = categoryItems.indexOf(item);
+      controller.setPlaylistItems(categoryItems,
+          startIndex: startIndex >= 0 ? startIndex : 0);
 
-    // 播放选中的歌曲
-    controller.playMedia(item, autoPlay: true);
+      // 播放选中的歌曲
+      await controller.playMedia(item, autoPlay: true);
+    } catch (e) {
+      print('_navigateToMusicDetail: $e');
+
+      final playerState = controller.state;
+      String errorMessage = playerState.errorMessage ?? '播放失败';
+      // 显示错误提示
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   /// 新增/编辑分类弹窗
