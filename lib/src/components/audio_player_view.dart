@@ -31,7 +31,7 @@ class AudioPlayerView extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      state.currentItem?.title ?? 'Unknown',
+                      state.currentItem?.title ?? '未知',
                       style: theme.textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                       maxLines: 2,
@@ -39,7 +39,7 @@ class AudioPlayerView extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      state.currentItem?.artist ?? 'Unknown Artist',
+                      state.currentItem?.artist ?? '未知歌手',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color:
                             theme.textTheme.bodyLarge?.color?.withOpacity(0.7),

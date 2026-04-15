@@ -97,7 +97,7 @@ class VideoTab extends ConsumerWidget {
           final mediaItem = MediaItem(
             id: '$timestamp-$i',
             title: path.basenameWithoutExtension(file.name),
-            artist: 'Unknown',
+            artist: '未知歌手',
             uri: file.path!,
             type: MediaType.video,
           );

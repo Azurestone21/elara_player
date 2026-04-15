@@ -93,7 +93,7 @@ class PlayerControls extends StatelessWidget {
           child: UniversalPlatform.isWindows
               ? Container(color: Colors.transparent)
               : Text(
-                  state.currentItem?.title ?? 'Unknown',
+                  state.currentItem?.title ?? '未知',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
