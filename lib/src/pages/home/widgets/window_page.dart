@@ -205,7 +205,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
       onChange: (value) {
         setState(() => _currentTab = value);
         // 重置播放器，清空当前播放项和播放列表
-        final playerController = ref.read(playerControllerProvider);
+        final playerController = ref.read(playerControllerServiceProvider);
         playerController.reset();
       },
     );
@@ -241,7 +241,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
                   _selectedAudioCategoryId = category.id;
 
                   // 切换音频分类时，更新播放列表
-                  final controller = ref.read(playerControllerProvider);
+                  final controller = ref.read(playerControllerServiceProvider);
                   final categoryItems =
                       categoryService.getMediaItemsByCategory(category.id);
                   controller.setPlaylistItems(categoryItems);
@@ -328,7 +328,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
   }
 
   void _openMusicDetailFromControls() {
-    final controller = ref.read(playerControllerProvider);
+    final controller = ref.read(playerControllerServiceProvider);
     final currentItem = controller.state.currentItem;
 
     if (currentItem == null || currentItem.type != MediaType.audio) return;
@@ -358,7 +358,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
   }
 
   void _navigateToPlayer(MediaItem item) {
-    final controller = ref.read(playerControllerProvider);
+    final controller = ref.read(playerControllerServiceProvider);
     final categoryService = ref.read(categoryServiceProvider);
 
     // 获取当前分类的所有视频项目
@@ -457,7 +457,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
 
   Widget _buildMusicPlayerControls() {
     final theme = Theme.of(context);
-    final playerController = ref.watch(playerControllerProvider);
+    final playerController = ref.watch(playerControllerServiceProvider);
     final state = playerController.state;
 
     return GestureDetector(
