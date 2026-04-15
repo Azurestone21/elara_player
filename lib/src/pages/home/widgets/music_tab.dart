@@ -131,7 +131,7 @@ class MusicTab extends ConsumerWidget {
               categoryId: selectedCategoryId);
 
           // 更新播放列表
-          final controller = ref.read(playerControllerProvider);
+          final controller = ref.read(playerControllerServiceProvider);
           final categoryItems =
               categoryService.getMediaItemsByCategory(selectedCategoryId);
           controller.setPlaylistItems(categoryItems);

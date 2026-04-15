@@ -1,6 +1,6 @@
 // widgets/mini_player.dart
 import 'package:flutter/material.dart';
-import '../../services/player_controller.dart';
+import '../../services/player_controller_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -32,7 +32,7 @@ class _MiniPlayerState extends ConsumerState<MiniPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final playerController = ref.watch(playerControllerProvider);
+    final playerController = ref.watch(playerControllerServiceProvider);
     final state = playerController.state;
     final mediaItem = state.currentItem;
     final isPlaying = state.isPlaying;
@@ -116,7 +116,7 @@ class _MiniPlayerState extends ConsumerState<MiniPlayer> {
   }
 
   Widget _buildControlBar(bool isPlaying) {
-    final playerController = ref.watch(playerControllerProvider);
+    final playerController = ref.watch(playerControllerServiceProvider);
     return Container(
       width: 250,
       height: windowHeight,
