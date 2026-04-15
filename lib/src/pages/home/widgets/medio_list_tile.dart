@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/category.dart';
 import '../../../models/media_item.dart';
 import '../../../router/router.dart';
-import '../../../components/category_manager.dart';
+import '../../../services/services.dart';
 
 /// 媒体列表项
 class MedioListTile extends StatelessWidget {
@@ -65,8 +65,7 @@ class MedioListTile extends StatelessWidget {
             final categoryService = ref.read(categoryServiceProvider);
 
             if (value == 'move') {
-              final categories =
-                  categoryService.getCategoriesByType(mediaType);
+              final categories = categoryService.getCategoriesByType(mediaType);
               if (categories.isNotEmpty) {
                 final selectedCategory = await showDialog<Category>(
                   context: context,
