@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/models.dart';
 
 class CategoryService extends ChangeNotifier {
@@ -175,3 +176,7 @@ class CategoryService extends ChangeNotifier {
     return _allMediaItems.where((item) => item.categoryId == categoryId).length;
   }
 }
+
+final categoryServiceProvider = ChangeNotifierProvider<CategoryService>((ref) {
+  return CategoryService();
+});
