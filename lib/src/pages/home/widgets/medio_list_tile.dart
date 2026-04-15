@@ -37,7 +37,9 @@ class MedioListTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: index % 2 == 1 ? null : theme.sliderTheme.overlayColor?.withOpacity(0.04),
+        color: index % 2 == 1
+            ? null
+            : theme.sliderTheme.overlayColor?.withOpacity(0.04),
       ),
       child: ListTile(
         contentPadding:
