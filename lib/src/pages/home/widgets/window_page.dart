@@ -546,7 +546,7 @@ class _WindowPageState extends ConsumerState<WindowPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              state.currentItem!.artist ?? 'Unknown Artist',
+                              state.currentItem!.artist ?? '未知歌手',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: theme.colorScheme.onSurface
