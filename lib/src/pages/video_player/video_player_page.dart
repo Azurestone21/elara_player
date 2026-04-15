@@ -32,7 +32,7 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
 
   void _initializePlayer() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final controller = ref.read(playerControllerProvider);
+      final controller = ref.read(playerControllerServiceProvider);
 
       if (widget.playlist != null && widget.playlist!.isNotEmpty) {
         controller.playlist
@@ -70,22 +70,22 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
     _seekDebounceTimer?.cancel();
     _seekDebounceTimer = Timer(const Duration(milliseconds: 100), () {
       if (mounted) {
-        ref.read(playerControllerProvider).seek(position);
+        ref.read(playerControllerServiceProvider).seek(position);
       }
     });
   }
 
   void _handleVolumeChange(double volume) {
-    ref.read(playerControllerProvider).setVolume(volume);
+    ref.read(playerControllerServiceProvider).setVolume(volume);
   }
 
   void _handleSpeedChange(double speed) {
-    ref.read(playerControllerProvider).setSpeed(speed);
+    ref.read(playerControllerServiceProvider).setSpeed(speed);
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(playerControllerProvider);
+    final controller = ref.watch(playerControllerServiceProvider);
     final state = controller.state;
 
     return Scaffold(
@@ -104,7 +104,7 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
     );
   }
 
-  Widget _buildPlayerBody(PlayerController controller, PlayerState state) {
+  Widget _buildPlayerBody(PlayerControllerService controller, PlayerState state) {
     final customVideoColors = Theme.of(context).extension<CustomVideoColors>();
 
     return VolumeBrightnessGesture(
@@ -171,7 +171,7 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
     );
   }
 
-  Widget _buildMediaContent(PlayerController controller, PlayerState state) {
+  Widget _buildMediaContent(PlayerControllerService controller, PlayerState state) {
     if (state.currentItem == null) {
       return Container(
         color: Colors.black,

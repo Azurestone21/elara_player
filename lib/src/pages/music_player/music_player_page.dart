@@ -44,7 +44,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
 
   void _loadLyrics() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final controller = ref.read(playerControllerProvider);
+      final controller = ref.read(playerControllerServiceProvider);
       final currentItem = controller.state.currentItem;
       if (currentItem != null && currentItem.type == MediaType.audio) {
         _parseLyricFile(currentItem);
@@ -181,18 +181,18 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
     _seekDebounceTimer?.cancel();
     _seekDebounceTimer = Timer(const Duration(milliseconds: 100), () {
       if (mounted) {
-        ref.read(playerControllerProvider).seek(position);
+        ref.read(playerControllerServiceProvider).seek(position);
       }
     });
   }
 
   void _handleVolumeChange(double volume) {
-    ref.read(playerControllerProvider).setVolume(volume);
+    ref.read(playerControllerServiceProvider).setVolume(volume);
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(playerControllerProvider);
+    final controller = ref.watch(playerControllerServiceProvider);
     final state = controller.state;
 
     // 更新当前歌词
@@ -276,7 +276,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
           const SizedBox(height: 32),
           // 歌曲名称
           Text(
-            item?.title ?? 'Unknown Title',
+            item?.title ?? '未知',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -289,7 +289,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
           const SizedBox(height: 12),
           // 歌手
           Text(
-            item?.artist ?? 'Unknown Artist',
+            item?.artist ?? '未知歌手',
             style: const TextStyle(
               fontSize: 16,
               // color: Colors.grey[600],
@@ -422,7 +422,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               // 播放模式
               IconButton(
                 onPressed: () =>
-                    ref.read(playerControllerProvider).cyclePlayMode(),
+                    ref.read(playerControllerServiceProvider).cyclePlayMode(),
                 icon: Icon(
                   _getPlayModeIcon(state.playMode),
                   // color: Colors.grey[700],
@@ -432,7 +432,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               const SizedBox(width: 24),
               // 上一首
               IconButton(
-                onPressed: () => ref.read(playerControllerProvider).previous(),
+                onPressed: () => ref.read(playerControllerServiceProvider).previous(),
                 icon: const Icon(
                   Icons.skip_previous,
                   // color: Colors.grey[800],
@@ -450,7 +450,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
                 ),
                 child: IconButton(
                   onPressed: () =>
-                      ref.read(playerControllerProvider).togglePlayPause(),
+                      ref.read(playerControllerServiceProvider).togglePlayPause(),
                   icon: Icon(
                     state.isPlaying ? Icons.pause : Icons.play_arrow,
                     color: Colors.white,
@@ -461,7 +461,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
               const SizedBox(width: 16),
               // 下一首
               IconButton(
-                onPressed: () => ref.read(playerControllerProvider).next(),
+                onPressed: () => ref.read(playerControllerServiceProvider).next(),
                 icon: const Icon(
                   Icons.skip_next,
                   // color: Colors.grey[800],
@@ -483,7 +483,7 @@ class _MusicPlayerPageState extends ConsumerState<MusicPlayerPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          onPressed: () => ref.read(playerControllerProvider).toggleMute(),
+          onPressed: () => ref.read(playerControllerServiceProvider).toggleMute(),
           icon: Icon(
             state.isMuted ? Icons.volume_off : Icons.volume_up,
             // color: Colors.grey[700],
