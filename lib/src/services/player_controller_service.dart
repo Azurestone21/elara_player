@@ -12,13 +12,13 @@ import '../models/models.dart';
 import 'playlist_service.dart';
 
 /// 播放器控制器提供者，用于全局访问播放器实例
-final playerControllerProvider =
-    ChangeNotifierProvider<PlayerController>((ref) {
-  return PlayerController();
+final playerControllerServiceProvider =
+    ChangeNotifierProvider<PlayerControllerService>((ref) {
+  return PlayerControllerService();
 });
 
 /// 播放器控制器类，负责管理音频和视频的播放
-class PlayerController extends ChangeNotifier {
+class PlayerControllerService extends ChangeNotifier {
   /// 播放列表服务
   final PlaylistService _playlist = PlaylistService();
 
@@ -70,7 +70,7 @@ class PlayerController extends ChangeNotifier {
   bool _isPlayingMedia = false;
 
   /// 构造函数，初始化音频播放器
-  PlayerController() {
+  PlayerControllerService() {
     _initAudioPlayer();
   }
 
@@ -139,7 +139,8 @@ class PlayerController extends ChangeNotifier {
         await _initAudioPlayerSource(item, autoPlay: autoPlay);
       }
     } catch (e) {
-      _handleError('Failed to play media: $e');
+      print('playMedia error: $e');
+      rethrow;
     } finally {
       _isPlayingMedia = false;
     }
@@ -262,26 +263,38 @@ class PlayerController extends ChangeNotifier {
 
   Future<void> _initAudioPlayerSource(MediaItem item,
       {bool autoPlay = true}) async {
-    ap.Source source;
-    if (item.isNetwork) {
-      source = ap.UrlSource(item.uri);
-    } else {
-      source = ap.DeviceFileSource(item.uri);
+    try {
+      ap.Source source;
+      if (item.isNetwork) {
+        source = ap.UrlSource(item.uri);
+      } else {
+        source = ap.DeviceFileSource(item.uri);
+      }
+
+      _updateState(_state.copyWith(
+        status: PlayerStatus.buffering,
+        duration: item.duration ?? Duration.zero,
+      ));
+
+      if (autoPlay) {
+        await _audioPlayer!.play(source);
+      } else {
+        await _audioPlayer!.setSource(source);
+        _updateState(_state.copyWith(status: PlayerStatus.paused));
+      }
+
+      _startPositionTimer();
+    } catch (e) {
+      // 检查是否是文件不存在的错误
+      if (e.toString().contains('Failed to set source') ||
+          e.toString().contains('WindowsAudioError') ||
+          e.toString().contains('File not found')) {
+        _handleError('当前音频不存在');
+      } else {
+        _handleError('播放失败: $e');
+      }
+      rethrow;
     }
-
-    _updateState(_state.copyWith(
-      status: PlayerStatus.buffering,
-      duration: item.duration ?? Duration.zero,
-    ));
-
-    if (autoPlay) {
-      await _audioPlayer!.play(source);
-    } else {
-      await _audioPlayer!.setSource(source);
-      _updateState(_state.copyWith(status: PlayerStatus.paused));
-    }
-
-    _startPositionTimer();
   }
 
   Future<void> play() async {
